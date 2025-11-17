@@ -3,10 +3,6 @@
 # dependencies
 node_modules/
 
-# Firebase Admin SDK and other secret files
-frgians-firebase-adminsdk-fbsvc-*.json
-*.env
-
 # Expo
 .expo/
 dist/
@@ -38,6 +34,11 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+# Firebase Admin SDK and other secret files
+frgians-firebase-adminsdk-fbsvc-1f3f3ec242.json
+frgians-firebase-adminsdk-fbsvc-4c423b5029.json
+*.env
 
 app-example
 
