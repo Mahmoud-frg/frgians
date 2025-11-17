@@ -7,10 +7,11 @@ import {
   View,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { collection, getDocs, limit, query } from 'firebase/firestore';
+import { collection, getDocs, limit, orderBy, query } from 'firebase/firestore';
 import { db } from '@/configs/FirebaseConfig';
 import PersonCardItem from '../Person/PersonCardItem';
 import { router } from 'expo-router';
+import { Colors } from '@/constants/Colors';
 
 const PersonsList = () => {
   const [persons, setPersons] = useState<personsListType[]>([]);
@@ -20,7 +21,11 @@ const PersonsList = () => {
     setLoading(true);
 
     setPersons([]);
-    const q = query(collection(db, 'personsList'), limit(50));
+    const q = query(
+      collection(db, 'personsList'),
+      orderBy('arrangement', 'asc'),
+      limit(50)
+    );
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
       const docdata = doc.data() as personsListType;
@@ -38,13 +43,13 @@ const PersonsList = () => {
   };
 
   return (
-    <>
+    <View className='w-full h-auto py-4 mt-1'>
       {persons ? (
         <View
-          className='p-2 mt-5'
+          className='mb-2 pt-2'
           style={styles.shadow}
         >
-          <View className='flex flex-row justify-between p-1'>
+          <View className='flex flex-row justify-between pl-2'>
             <Text
               className='text-2xl font-semibold color-title pl-4'
               style={{ fontFamily: 'outfit-bold' }}
@@ -53,13 +58,13 @@ const PersonsList = () => {
             </Text>
             <TouchableOpacity
               onPress={() => onViewAllHandler()}
-              className='mr-5'
+              className='mr-5 bg-seeAll rounded-full items-center justify-center px-3 py-1'
             >
               <Text
-                className='color-slate-600'
+                className='color-darker'
                 style={{ fontFamily: 'outfit-medium' }}
               >
-                View All
+                See all
               </Text>
             </TouchableOpacity>
           </View>
@@ -77,19 +82,19 @@ const PersonsList = () => {
             )}
             horizontal={true}
             showsHorizontalScrollIndicator={false}
-            className='ml-3 mt-2'
-            onRefresh={GetPersonsList}
+            className='mt-2'
+            // onRefresh={GetPersonsList}
             refreshing={loading}
           />
         </View>
       ) : (
         <ActivityIndicator
           size='large'
-          color='#ff0031'
+          color={Colors.coSecondary}
           className='mt-[50%] self-center'
         />
       )}
-    </>
+    </View>
   );
 };
 
@@ -97,7 +102,7 @@ export default PersonsList;
 
 const styles = StyleSheet.create({
   shadow: {
-    shadowColor: '#000',
+    shadowColor: '#fff',
     shadowOffset: {
       width: 0,
       height: 3,

@@ -1,18 +1,14 @@
-import { ClerkProvider, SignedIn, SignedOut, useUser } from '@clerk/clerk-expo';
-import { tokenCache } from '@clerk/clerk-expo/token-cache';
-import LoginScreen from '@/components/LoginScreen';
-import { Redirect } from 'expo-router';
-import { ActivityIndicator, Text, View } from 'react-native';
-import { Colors } from '@/constants/Colors';
+import { useState } from 'react';
+import { useRouter } from 'expo-router';
+import AppLoadingScreen from '@/components/LoadingScreen/AppLoadingScreen';
 
 export default function Index() {
-  // return <Redirect href={'/home'} />;
-  return (
-    <View style={{ flex: 1, justifyContent: 'center' }}>
-      <ActivityIndicator
-        size='large'
-        color={Colors.primary}
-      />
-    </View>
-  );
+  const router = useRouter();
+  const [loadingDone, setLoadingDone] = useState(false);
+
+  if (!loadingDone) {
+    return <AppLoadingScreen onFinish={() => {}} />;
+  }
+
+  return null;
 }

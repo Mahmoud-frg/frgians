@@ -16,13 +16,13 @@ const NewsCardItem = ({
 }: NewsCardItemProps) => {
   return (
     <TouchableOpacity
-      onPress={() => onNewsPress(news?.index)}
+      onPress={() => onNewsPress(news?.index as number)}
       activeOpacity={0.7}
       style={[
         styles.card,
         highlighted && {
           paddingTop: 10,
-          backgroundColor: 'rgba(0,0,0,0.25)',
+          backgroundColor: 'rgba(53,86,101,0.25)',
         },
       ]}
     >
@@ -30,7 +30,7 @@ const NewsCardItem = ({
         <View className='bg-white rounded-2xl w-full h-32'>
           <Image
             source={
-              news?.imgUrl === '' ? images.FRGwhite : { uri: news?.imgUrl }
+              news?.imgUrl === '' ? images.FRGwhiteBG : { uri: news?.imgUrl }
             }
             className='w-full h-full self-center rounded-2xl'
             resizeMode='cover'
@@ -38,14 +38,18 @@ const NewsCardItem = ({
         </View>
         <View className='my-2'>
           <Text
-            className='text-xl text-center text-secondary'
+            className='text-xl text-center text-title'
             style={{ fontFamily: 'outfit-bold' }}
+            numberOfLines={1}
+            ellipsizeMode='tail'
           >
             {news?.title}
           </Text>
           <Text
-            className='text-sm text-center color-slate-600'
+            className='text-sm text-center color-coTitle'
             style={{ fontFamily: 'outfit-regular' }}
+            numberOfLines={2}
+            ellipsizeMode='tail'
           >
             {news?.head}
           </Text>
@@ -72,5 +76,5 @@ const styles = StyleSheet.create({
   card: {
     borderRadius: 10,
   },
-  highlighted: { backgroundColor: 'rgba(0,0,0,0.25)' },
+  highlighted: { backgroundColor: 'rgba(255,255,255,0.25)' },
 });

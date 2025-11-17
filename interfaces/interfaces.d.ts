@@ -83,6 +83,7 @@ interface Person {
 interface TrendingPerson {
   id: number;
   name: string;
+  title: string;
   imageUrl: string;
 }
 
@@ -112,6 +113,14 @@ interface SliderType {
   imageUrl: string;
   about: string;
   title: string;
+  frgMail: string;
+}
+interface BrandsType {
+  id: number;
+  name: string;
+  imageUrl: string;
+  motto: string;
+  founded: string;
 }
 
 interface CategoryType {
@@ -124,24 +133,49 @@ interface personsListType {
   id?: string;
   about: string;
   address: string;
+  arrangement: number;
   contact: number;
+  emergency: number;
   department: string;
   departmentId: number;
   frgMail: string;
   code: number;
   imageUrl: string;
   joinDate: string;
+  jobDescription: string;
+  dateOfBirth: string;
   name: string;
   reportTo: string;
   title: string;
+  isAdmin: boolean;
 }
 
 interface newsListType {
   id?: string;
-  index:number;
+  index?: number;
   title: string;
   imgUrl: string;
   head: string;
   body: string;
   date: string;
+  seenBy: Array;
+  likes: string[];
+  commentable: boolean;
+  comments: {
+    id: string;
+    userId: string;
+    name: string;
+    image: string;
+    text: string;
+    createdAt: string;
+  }[];
+}
+
+interface branchesListType {
+  id?: number;
+  name: string;
+  imgUrl: string;
+  brand: string;
+  location: string;
+  manager: string;
 }

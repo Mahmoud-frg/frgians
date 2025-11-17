@@ -3,6 +3,7 @@ import React from 'react';
 import { useRouter } from 'expo-router';
 import { images } from '@/constants/images';
 import { useNavigationState, useNavigation } from '@react-navigation/native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 type PersonsListCardProps = {
   person: personsListType;
@@ -32,42 +33,52 @@ const PersonsListCard = ({ person }: PersonsListCardProps) => {
       activeOpacity={0.7}
     >
       <View
-        className='flex flex-row w-full m-2  bg-white rounded-xl items-center self-center'
+        className='flex flex-row w-full m-2  bg-catPersons rounded-xl items-center self-center'
         style={styles.shadow}
       >
         <Image
           source={
             person?.imageUrl === ''
-              ? images.FRGwhite
+              ? images.FRGiansBG
               : { uri: person?.imageUrl }
           }
-          className='w-32 h-32 rounded-2xl m-1'
+          className='w-32 h-32 rounded-2xl m-1 bg-secondary'
         />
-        <View className='w-[70%] m-3'>
+        <View className='w-[65%] m-3'>
           <Text
-            className='text-2xl text-secondary'
+            className='text-2xl text-darkest'
             style={{ fontFamily: 'outfit-bold' }}
           >
             {person?.name}
           </Text>
           <Text
-            className='text-l color-slate-600'
+            className='text-l color-[#711B25]'
             style={{ fontFamily: 'outfit-medium' }}
           >
             {person?.title}
           </Text>
           <Text
-            className='text-l color-title'
+            className='text-l color-[#F05727]'
             style={{ fontFamily: 'outfit-medium' }}
           >
             Joined @ {person?.joinDate}
           </Text>
-          <Text
-            className='text-l color-secondary'
-            style={{ fontFamily: 'outfit-semi-bold' }}
-          >
-            {person?.frgMail}
-          </Text>
+          <View className='flex flex-row justify-between items-center'>
+            <Text
+              className='text-l color-[#5D626C] w-[75%]'
+              style={{ fontFamily: 'outfit-semi-bold' }}
+            >
+              {person?.frgMail}
+            </Text>
+            <View className='w-auto h-auto px-2 rounded-full bg-dataHolder text-center items-center content-center self-center'>
+              <Text
+                className='text-2xl color-coTitle'
+                style={{ fontFamily: 'outfit-extra-bold' }}
+              >
+                {person?.code}
+              </Text>
+            </View>
+          </View>
         </View>
       </View>
     </TouchableOpacity>
@@ -78,7 +89,7 @@ export default PersonsListCard;
 
 const styles = StyleSheet.create({
   shadow: {
-    shadowColor: '#000',
+    shadowColor: '#fff',
     shadowOffset: {
       width: 0,
       height: 3,

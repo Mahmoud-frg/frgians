@@ -1,9 +1,16 @@
+import {
+  KeyboardAvoidingView,
+  Platform,
+  Keyboard,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import { useSignIn } from '@clerk/clerk-expo';
 import { Link, useRouter, Stack } from 'expo-router';
 import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { images } from '@/constants/images';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function PwReset() {
   const { signIn, setActive, isLoaded } = useSignIn();
@@ -67,89 +74,145 @@ export default function PwReset() {
   };
 
   return (
-    <View className='flex-1 justify-center'>
-      <Stack.Screen options={{ headerBackVisible: !successfulCreation }} />
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1 }}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={{ flex: 1 }}>
+          <LinearGradient
+            colors={[
+              '#001920', // deep navy black (bottom base)
+              '#00181f', // dark desaturated blue
+              '#093341', // mid-indigo layer
+              '#1E4451', // soft vibrant blue
+              '#2B505D', // light glow blue (top-right)
+            ]}
+            locations={[0, 0.25, 0.5, 0.75, 1]} // smooth transitions
+            start={{ x: 0, y: 1 }} // bottom left
+            end={{ x: 1, y: 0 }} // top right
+            style={{ flex: 1, justifyContent: 'center', padding: 40 }}
+          >
+            <Stack.Screen
+              options={{ headerBackVisible: !successfulCreation }}
+            />
 
-      <View className='w-96 mx-auto bg-white rounded-lg shadow-2xl p-10'>
-        <Spinner visible={loading} />
+            <View className='w-96 mx-auto bg-search rounded-2xl shadow-2xl p-10'>
+              <Spinner visible={loading} />
 
-        <View className='mx-auto mb-5'>
-          <Text className='mx-auto text-3xl font-bold color-title'>
-            Reset your password
-          </Text>
-          <Image source={images.FRGians} className='w-14 h-14 mt-10 mx-auto' />
-          <Text className='mx-auto text-secondary text-base font-extrabold'>
-            FRGians
-          </Text>
-        </View>
-
-        {!successfulCreation && (
-          <>
-            <View className='gap-2'>
-              <TextInput
-                className='w-full px-4 py-3 rounded-lg bg-primary'
-                autoCapitalize='none'
-                value={emailAddress}
-                placeholder='email'
-                onChangeText={(emailAddress) => setEmailAddress(emailAddress)}
-              />
-            </View>
-
-            <View className='p-7'>
-              <TouchableOpacity
-                onPress={onRequestReset}
-                className='w-full px-4 py-3 rounded-lg bg-title'
-              >
-                <Text className='mx-auto text-xl font-bold text-white'>
-                  Send Reset Email
+              <View className='mx-auto mb-5'>
+                <Text
+                  className='mx-auto text-3xl color-coTitle'
+                  style={{ fontFamily: 'outfit-bold' }}
+                >
+                  Reset your password
                 </Text>
-              </TouchableOpacity>
-            </View>
-          </>
-        )}
-
-        {successfulCreation && (
-          <>
-            <View className='gap-2'>
-              <TextInput
-                className='w-full px-4 py-3 rounded-lg bg-primary'
-                value={code}
-                placeholder='Reset password code...'
-                onChangeText={(code) => setCode(code)}
-              />
-              <TextInput
-                className='w-full px-4 py-3 rounded-lg bg-primary'
-                value={password}
-                placeholder='new password'
-                secureTextEntry={true}
-                onChangeText={(password) => setPassword(password)}
-              />
-            </View>
-
-            <View className='p-7'>
-              <TouchableOpacity
-                onPress={onReset}
-                className='w-full px-4 py-3 rounded-lg bg-title'
-              >
-                <Text className='mx-auto text-xl font-bold text-white'>
-                  Set new Password
+                <Image
+                  source={images.FRGians}
+                  className='w-14 h-14 mt-10 mx-auto'
+                  tintColor='#000000'
+                />
+                <Text
+                  className='mx-auto text-coTitle text-base'
+                  style={{ fontFamily: 'outfit-bold' }}
+                >
+                  FRGians
                 </Text>
-              </TouchableOpacity>
-            </View>
-          </>
-        )}
+              </View>
 
-        <View className='flex mx-auto'>
-          <Text className='mx-auto text-l font-bold'>
-            Remember your password!
-          </Text>
-          <Link href='/sign-in' className='mx-auto'>
-            <Text className='mx-auto text-2xl font-bold text-title'>
-              Sign in
-            </Text>
-          </Link>
+              {!successfulCreation && (
+                <>
+                  <View className='gap-2'>
+                    <TextInput
+                      className='w-full px-4 py-3 rounded-lg bg-secondary color-darkest border border-dataHolder'
+                      style={{ fontFamily: 'outfit-bold' }}
+                      autoCapitalize='none'
+                      value={emailAddress}
+                      placeholder='email'
+                      placeholderTextColor='#1234'
+                      onChangeText={(emailAddress) =>
+                        setEmailAddress(emailAddress)
+                      }
+                    />
+                  </View>
+
+                  <View className='p-7'>
+                    <TouchableOpacity
+                      onPress={onRequestReset}
+                      className='w-full px-4 py-3 rounded-lg bg-coSecondary'
+                    >
+                      <Text
+                        className='mx-auto text-xl text-darkest'
+                        style={{ fontFamily: 'outfit-bold' }}
+                      >
+                        Send Reset Email
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </>
+              )}
+
+              {successfulCreation && (
+                <>
+                  <View className='gap-2'>
+                    <TextInput
+                      className='w-full px-4 py-3 rounded-lg bg-title color-darkest border border-dataHolder'
+                      style={{ fontFamily: 'outfit-bold' }}
+                      value={code}
+                      placeholder='Reset password code...'
+                      placeholderTextColor='#1234'
+                      onChangeText={(code) => setCode(code)}
+                    />
+                    <TextInput
+                      className='w-full px-4 py-3 rounded-lg bg-title color-darkest border border-dataHolder'
+                      style={{ fontFamily: 'outfit-bold' }}
+                      value={password}
+                      placeholder='new password'
+                      placeholderTextColor='#1234'
+                      secureTextEntry={true}
+                      onChangeText={(password) => setPassword(password)}
+                    />
+                  </View>
+
+                  <View className='p-7'>
+                    <TouchableOpacity
+                      onPress={onReset}
+                      className='w-full px-4 py-3 rounded-lg bg-coSecondary'
+                    >
+                      <Text
+                        className='mx-auto text-xl text-darkest'
+                        style={{ fontFamily: 'outfit-bold' }}
+                      >
+                        Set new Password
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </>
+              )}
+
+              <View className='flex mx-auto'>
+                <Text
+                  className='mx-auto text-l color-darkest'
+                  style={{ fontFamily: 'outfit-bold' }}
+                >
+                  Remember your password!
+                </Text>
+                <Link
+                  href='/sign-in'
+                  className='mx-auto'
+                >
+                  <Text
+                    className='mx-auto text-2xl text-coSecondary'
+                    style={{ fontFamily: 'outfit-bold' }}
+                  >
+                    Sign in
+                  </Text>
+                </Link>
+              </View>
+            </View>
+          </LinearGradient>
         </View>
-      </View>
-    </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 }

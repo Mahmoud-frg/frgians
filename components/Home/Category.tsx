@@ -11,6 +11,7 @@ import { collection, getDocs, query } from 'firebase/firestore';
 import CategoryItem from '../Category/CategoryItem';
 import { useRouter } from 'expo-router';
 import { useNavigationState } from '@react-navigation/native';
+import { Colors } from '@/constants/Colors';
 
 type CategoryProps = {
   search?: boolean;
@@ -47,9 +48,13 @@ const Category: React.FC<CategoryProps> = ({
     GetCategory();
   }, []);
 
-  const onCategoryPressHandler = (name: string) => {
+  const onCategoryPressHandler = (name: string, id: number) => {
     if (!search) {
-      router.push(`/personslist/${name}`);
+      // router.push(`/personslist/${name}`);
+      router.push({
+        pathname: '/personslist/[category]',
+        params: { category: id.toString(), name },
+      });
       // console.log('Current page:', currentRoute);
     }
     if (search && onCategorySelect) {
@@ -59,21 +64,21 @@ const Category: React.FC<CategoryProps> = ({
   };
 
   return (
-    <>
+    <View className='w-full h-auto mt-2 bg-backBtn'>
       {!loading && categoryList.length === 0 && (
         <Text className='text-center mt-10 text-gray-500'>
           No Categories Found
         </Text>
       )}
       {categoryList.length > 0 ? (
-        <View className='p-2 mt-5'>
+        <View className='mt-4'>
           {!search && (
-            <View className='flex flex-row justify-between p-1'>
+            <View className='flex flex-row justify-between pl-2'>
               <Text
-                className='text-2xl font-semibold color-title pl-4'
+                className='text-2xl font-semibold color-title pl-4 mb-2'
                 style={{ fontFamily: 'outfit-bold' }}
               >
-                Our Departments
+                Departments
               </Text>
               {/* <Text
               className='color-slate-600'
@@ -90,24 +95,23 @@ const Category: React.FC<CategoryProps> = ({
               <CategoryItem
                 key={index}
                 category={item}
-                onCategoryPress={(id, name) => onCategoryPressHandler(name)}
+                onCategoryPress={(id, name) => onCategoryPressHandler(name, id)}
               />
             )}
             horizontal={true}
             showsHorizontalScrollIndicator={false}
-            className='ml-3 mt-2'
-            onRefresh={GetCategory}
+            // onRefresh={GetCategory}
             refreshing={loading}
           />
         </View>
       ) : (
         <ActivityIndicator
           size='large'
-          color='#ff0031'
+          color={Colors.coSecondary}
           className='mt-[50%] self-center'
         />
       )}
-    </>
+    </View>
   );
 };
 

@@ -1,3 +1,9 @@
+import {
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Platform,
+} from 'react-native';
 import * as React from 'react';
 import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useSignUp } from '@clerk/clerk-expo';
@@ -5,6 +11,7 @@ import { Link, useRouter } from 'expo-router';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { images } from '@/constants/images';
 import { Colors } from '@/constants/Colors';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function SignUpScreen() {
   const { isLoaded, signUp, setActive } = useSignUp();
@@ -19,13 +26,27 @@ export default function SignUpScreen() {
   const [code, setCode] = React.useState('');
   const [loading, setLoading] = React.useState(false);
 
+  const isUsernameValid = (username: string) => {
+    // Must be 3–50 characters, only letters, numbers, underscores, and hyphens
+    const usernameRegex = /^[a-zA-Z0-9_-]{3,50}$/;
+    return usernameRegex.test(username);
+  };
+
   // Handle submission of sign-up form
   const onSignUpPress = async () => {
     if (!isLoaded) return;
 
+    // Username validation
+    if (!isUsernameValid(username)) {
+      alert(
+        'Username must be 3–50 characters and contain only letters, numbers, underscores, or hyphens.'
+      );
+      return;
+    }
+
     // Email domain validation
     if (!emailAddress.endsWith('@frg-eg.com')) {
-      alert('Please use your company email address (@frg-eg.com) to sign up.');
+      alert('Please use your official email id (@frg-eg.com) to sign up.');
       return;
     }
 
@@ -89,132 +110,215 @@ export default function SignUpScreen() {
 
   if (pendingVerification) {
     return (
-      <View className='flex-1 justify-center'>
-        <View className='mx-auto bg-white rounded-lg shadow-2xl p-10'>
-          <Spinner visible={loading} />
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0} // adjust if header exists
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View className='flex-1 justify-center bg-primary'>
+            <LinearGradient
+              colors={[
+                '#001920', // deep navy black (bottom base)
+                '#00181f', // dark desaturated blue
+                '#093341', // mid-indigo layer
+                '#1E4451', // soft vibrant blue
+                '#2B505D', // light glow blue (top-right)
+              ]}
+              locations={[0, 0.25, 0.5, 0.75, 1]} // smooth transitions
+              start={{ x: 0, y: 1 }} // bottom left
+              end={{ x: 1, y: 0 }} // top right
+              style={{ flex: 1, justifyContent: 'center', padding: 40 }}
+            >
+              <View className='mx-auto bg-search rounded-2xl shadow-2xl p-10'>
+                <Spinner visible={loading} />
 
-          <View className='mx-auto'>
-            <Text className='mx-auto text-3xl font-bold color-title'>
-              Verify your email
-            </Text>
-            <Image
-              source={images.FRGians}
-              className='w-14 h-14 mt-10 mx-auto'
-            />
-            <Text className='mx-auto text-secondary text-base font-extrabold'>
-              FRGians
-            </Text>
+                <View className='mx-auto'>
+                  <Text
+                    className='mx-auto text-3xl color-coTitle'
+                    style={{ fontFamily: 'outfit-bold' }}
+                  >
+                    Verify your email
+                  </Text>
+                  <Image
+                    source={images.FRGians}
+                    className='w-14 h-14 mt-10 mx-auto'
+                    tintColor='#000000'
+                  />
+                  <Text
+                    className='mx-auto text-coTitle'
+                    style={{ fontFamily: 'outfit-bold' }}
+                  >
+                    FRGians
+                  </Text>
+                </View>
+
+                <View className='p-10'>
+                  <View className='gap-2'>
+                    <TextInput
+                      className='w-full px-4 py-3 rounded-lg bg-secondary color-darkest border border-dataHolder'
+                      style={{ fontFamily: 'outfit-bold' }}
+                      value={code}
+                      placeholder='Enter your verification code'
+                      placeholderTextColor='#1234'
+                      onChangeText={(code) => setCode(code)}
+                    />
+                  </View>
+
+                  <View className='p-7'>
+                    <TouchableOpacity
+                      onPress={onVerifyPress}
+                      className='w-full px-4 py-3 rounded-lg bg-coSecondary'
+                    >
+                      <Text
+                        className='mx-auto text-xl text-darkest'
+                        style={{ fontFamily: 'outfit-bold' }}
+                      >
+                        Verify
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+            </LinearGradient>
           </View>
-
-          <View className='p-10'>
-            <View className='gap-2'>
-              <TextInput
-                className='w-full px-4 py-3 rounded-lg bg-primary'
-                value={code}
-                placeholder='Enter your verification code'
-                onChangeText={(code) => setCode(code)}
-              />
-            </View>
-
-            <View className='p-7'>
-              <TouchableOpacity
-                onPress={onVerifyPress}
-                className='w-full px-4 py-3 rounded-lg bg-title'
-              >
-                <Text className='mx-auto text-xl font-bold text-white'>
-                  Verify
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </View>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     );
   }
 
   return (
-    <View className='flex-1 justify-center'>
-      <View className='w-96 mx-auto bg-white rounded-lg shadow-2xl p-10'>
-        <Spinner visible={loading} />
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0} // adjust if header exists
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View className='flex-1 justify-center bg-primary'>
+          <LinearGradient
+            colors={[
+              '#001920', // deep navy black (bottom base)
+              '#00181f', // dark desaturated blue
+              '#093341', // mid-indigo layer
+              '#1E4451', // soft vibrant blue
+              '#2B505D', // light glow blue (top-right)
+            ]}
+            locations={[0, 0.25, 0.5, 0.75, 1]} // smooth transitions
+            start={{ x: 0, y: 1 }} // bottom left
+            end={{ x: 1, y: 0 }} // top right
+            style={{ flex: 1, justifyContent: 'center', padding: 40 }}
+          >
+            <View className='w-96 mx-auto bg-search rounded-2xl shadow-2xl p-10'>
+              <Spinner visible={loading} />
 
-        <View className='mx-auto mb-5'>
-          <Text className='mx-auto text-3xl font-bold color-title'>
-            Sign up
-          </Text>
-          <Image
-            source={images.FRGians}
-            className='w-14 h-14 mt-10 mx-auto'
-          />
-          <Text className='mx-auto text-secondary text-base font-extrabold'>
-            FRGians
-          </Text>
-          <Text className='mx-auto mt-5 text-xl font-bold'>
-            Join our FRG application
-          </Text>
+              <View className='mx-auto mb-5'>
+                <Text
+                  className='mx-auto text-3xl color-coTitle'
+                  style={{ fontFamily: 'outfit-bold' }}
+                >
+                  Sign up
+                </Text>
+                <Image
+                  source={images.FRGians}
+                  className='w-14 h-14 mt-10 mx-auto'
+                  tintColor='#000000'
+                />
+                <Text
+                  className='mx-auto text-coTitle'
+                  style={{ fontFamily: 'outfit-bold' }}
+                >
+                  FRGians
+                </Text>
+                <Text
+                  className='mx-auto mt-5 text-xl color-title'
+                  style={{ fontFamily: 'outfit-bold' }}
+                >
+                  Join our FRG application
+                </Text>
+              </View>
+
+              <View className='gap-2'>
+                <TextInput
+                  className='w-full px-4 py-3 rounded-lg bg-secondary color-darkest border border-dataHolder'
+                  style={{ fontFamily: 'outfit-bold' }}
+                  value={firstName}
+                  placeholder='first name'
+                  placeholderTextColor='#1234'
+                  onChangeText={(firstName) => setFirstName(firstName)}
+                />
+                <TextInput
+                  className='w-full px-4 py-3 rounded-lg bg-secondary color-darkest border border-dataHolder'
+                  style={{ fontFamily: 'outfit-bold' }}
+                  value={lastName}
+                  placeholder='last name'
+                  placeholderTextColor='#1234'
+                  onChangeText={(lastName) => setLastName(lastName)}
+                />
+                <TextInput
+                  className='w-full px-4 py-3 rounded-lg bg-secondary color-darkest border border-dataHolder'
+                  style={{ fontFamily: 'outfit-bold' }}
+                  value={username}
+                  placeholder='user name'
+                  placeholderTextColor='#1234'
+                  onChangeText={(username) => setUsername(username)}
+                />
+                <TextInput
+                  className='w-full px-4 py-3 rounded-lg bg-secondary color-darkest border border-dataHolder'
+                  style={{ fontFamily: 'outfit-bold' }}
+                  autoCapitalize='none'
+                  value={emailAddress}
+                  placeholder='email : name.name@frg-eg.com'
+                  placeholderTextColor='#1234'
+                  onChangeText={(email) => setEmailAddress(email)}
+                />
+                <TextInput
+                  className='w-full px-4 py-3 rounded-lg bg-secondary color-darkest border border-dataHolder'
+                  style={{ fontFamily: 'outfit-bold' }}
+                  value={password}
+                  placeholder='password'
+                  placeholderTextColor='#1234'
+                  secureTextEntry={true}
+                  onChangeText={(password) => setPassword(password)}
+                />
+              </View>
+
+              <View className='p-7'>
+                <TouchableOpacity
+                  onPress={onSignUpPress}
+                  className='w-full px-4 py-3 rounded-lg bg-coSecondary'
+                >
+                  <Text
+                    className='mx-auto text-xl text-darkest'
+                    style={{ fontFamily: 'outfit-bold' }}
+                  >
+                    Continue
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              <View className='flex gab-3'>
+                <Text
+                  className='mx-auto text-l text-darkest'
+                  style={{ fontFamily: 'outfit-bold' }}
+                >
+                  Already have an account?
+                </Text>
+                <Link
+                  href='/sign-in'
+                  className='mx-auto'
+                >
+                  <Text
+                    className='mx-auto text-2xl text-coSecondary'
+                    style={{ fontFamily: 'outfit-bold' }}
+                  >
+                    Sign in
+                  </Text>
+                </Link>
+              </View>
+            </View>
+          </LinearGradient>
         </View>
-
-        <View className=''>
-          <View className='gap-2'>
-            <TextInput
-              className='w-full px-4 py-3 rounded-lg bg-primary'
-              value={firstName}
-              placeholder='first name'
-              onChangeText={(firstName) => setFirstName(firstName)}
-            />
-            <TextInput
-              className='w-full px-4 py-3 rounded-lg bg-primary'
-              value={lastName}
-              placeholder='last name'
-              onChangeText={(lastName) => setLastName(lastName)}
-            />
-            <TextInput
-              className='w-full px-4 py-3 rounded-lg bg-primary'
-              value={username}
-              placeholder='user name'
-              onChangeText={(username) => setUsername(username)}
-            />
-            <TextInput
-              className='w-full px-4 py-3 rounded-lg bg-primary'
-              autoCapitalize='none'
-              value={emailAddress}
-              placeholder='email : name.name@frg-eg.com'
-              onChangeText={(email) => setEmailAddress(email)}
-            />
-            <TextInput
-              className='w-full px-4 py-3 rounded-lg bg-primary'
-              value={password}
-              placeholder='password'
-              secureTextEntry={true}
-              onChangeText={(password) => setPassword(password)}
-            />
-          </View>
-
-          <View className='p-7'>
-            <TouchableOpacity
-              onPress={onSignUpPress}
-              className='w-full px-4 py-3 rounded-lg bg-title'
-            >
-              <Text className='mx-auto text-xl font-bold text-white'>
-                Continue
-              </Text>
-            </TouchableOpacity>
-          </View>
-
-          <View className='flex gab-3'>
-            <Text className='mx-auto text-l font-bold'>
-              Already have an account?
-            </Text>
-            <Link
-              href='/sign-in'
-              className='mx-auto'
-            >
-              <Text className='mx-auto text-2xl font-bold text-title'>
-                Sign in
-              </Text>
-            </Link>
-          </View>
-        </View>
-      </View>
-    </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 }

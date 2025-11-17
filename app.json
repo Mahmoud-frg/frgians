@@ -2,46 +2,63 @@
   "expo": {
     "name": "FRGians",
     "slug": "frgians",
-    "version": "1.0.0",
+    "version": "1.1.0",
+    "icon": "./assets/images/FRG-icon-1030.png",
+    "splash": {
+      "image": "./assets/images/FRG-icon-1030.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#FFFFFF"
+    },
     "orientation": "portrait",
-    "icon": "./assets/images/FRGlogo.png",
-    "scheme": "myapp",
+    "scheme": "frgians",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "bundleIdentifier": "com.frg.frgians",
+      "googleServicesFile": "./GoogleService-Info.plist",
+      "supportsTablet": true,
+      "buildNumber": "1.1.0",
+      "usesAppleSignIn": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "We need access to your camera so you can take profile pictures.",
+        "NSMicrophoneUsageDescription": "We use your microphone to allow voice recording.",
+        "NSPhotoLibraryUsageDescription": "We need access to your photo library to allow you to upload images.",
+        "NSUserNotificationUsageDescription": "We use notifications to inform you about updates and important messages.",
+        "ITSAppUsesNonExemptEncryption": false,
+        "UIBackgroundModes": ["fetch", "remote-notification"]
+      }
     },
     "android": {
+      "package": "dev.expo.frgians",
+      "icon": "./assets/images/FRG-icon-1030.png",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/FRGlogo.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/images/FRG-icon-1030.png",
+        "backgroundColor": "#FFFFFF"
       },
-      "permissions": [
-        "android.permission.RECORD_AUDIO"
-      ]
+      "permissions": ["android.permission.RECORD_AUDIO"],
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/FRGlogo.png"
+      "favicon": "./assets/images/FRG-icon-1030.png"
+    },
+    "notification": {
+      "icon": "./assets/images/frgians-notification-icon.png",
+      "color": "#000000"
     },
     "plugins": [
       "expo-router",
-      [
-        "expo-splash-screen",
-        {
-          "image": "./assets/images/FRGlogo.png",
-          "imageWidth": 200,
-          "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
-        }
-      ],
+      "expo-splash-screen",
+      "expo-notifications",
       [
         "expo-image-picker",
         {
           "photosPermission": "The app accesses your photos to let you share them with your friends."
         }
-      ]
+      ],
+      "expo-web-browser",
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true

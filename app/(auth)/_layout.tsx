@@ -1,17 +1,26 @@
-import { Redirect, Stack } from "expo-router";
-import { useAuth } from "@clerk/clerk-expo";
+import { Redirect, router, Stack } from 'expo-router';
+import { useAuth } from '@clerk/clerk-expo';
+import { useEffect } from 'react';
 
 export default function AuthRoutesLayout() {
   const { isSignedIn } = useAuth();
 
-  if (isSignedIn) {
-    return <Redirect href={"/home"} />;
-  }
+  useEffect(() => {
+    if (isSignedIn) {
+      // return <Redirect href='/(tabs)/home' />;
+
+      router.replace('/(tabs)/home');
+    }
+  }, [isSignedIn]);
 
   return (
     <Stack
       screenOptions={{
         headerShown: false,
+        gestureEnabled: true,
+        fullScreenGestureEnabled: true,
+        gestureDirection: 'horizontal',
+        animation: 'slide_from_right',
       }}
     >
       {/* <Stack.Screen
@@ -22,21 +31,21 @@ export default function AuthRoutesLayout() {
       /> */}
 
       <Stack.Screen
-        name="sign-in"
+        name='sign-in'
         options={{
-          headerTitle: "Clerk Auth App",
+          headerTitle: 'Clerk Auth App',
         }}
       ></Stack.Screen>
       <Stack.Screen
-        name="sign-up"
+        name='sign-up'
         options={{
-          headerTitle: "Create Account",
+          headerTitle: 'Create Account',
         }}
       ></Stack.Screen>
       <Stack.Screen
-        name="pw-reset"
+        name='pw-reset'
         options={{
-          headerTitle: "Reset Password",
+          headerTitle: 'Reset Password',
         }}
       ></Stack.Screen>
     </Stack>

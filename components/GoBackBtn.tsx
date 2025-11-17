@@ -9,12 +9,13 @@ import {
 } from 'expo-router';
 import { icons } from '@/constants/icons';
 import { useNavigationState } from '@react-navigation/native';
+import { Colors } from '@/constants/Colors';
 
 const GoBackBtn = () => {
   const router = useRouter();
 
-  const { personid, from } = useLocalSearchParams<{
-    personid: string;
+  const { code, from } = useLocalSearchParams<{
+    code: string;
     from?: string;
   }>();
 
@@ -26,22 +27,53 @@ const GoBackBtn = () => {
   const handleGoBack = () => {
     if (router.canGoBack()) {
       if (from === 'search') {
-        router.push('/search');
+        router.replace('/search');
       }
       if (from === 'profile') {
-        router.push('/profile');
+        router.replace('/profile');
       }
-      if (from !== 'search' && from !== 'profile') {
+      if (from === 'update-my-info') {
+        router.replace({
+          pathname: '/persondetails/[personid]',
+          params: { personid: code, from: 'profile' },
+        });
+      }
+      if (from === 'update-person') {
+        router.replace({
+          pathname: '/persondetails/[personid]',
+          params: { personid: code, from: 'search' },
+        });
+      }
+      if (from === 'update-leader-info') {
+        router.replace({
+          pathname: '/leaderdetails/[leaderid]',
+          params: { leaderid: code, from: 'home' },
+        });
+      }
+      if (from === 'profile-add-news') {
+        router.replace({
+          pathname: '/news/add-news',
+          params: { from: 'profile' },
+        });
+      }
+      if (
+        from !== 'search' &&
+        from !== 'profile' &&
+        from !== 'update-my-info' &&
+        from !== 'update-person' &&
+        from !== 'update-leader-info' &&
+        from !== 'profile-add-news'
+      ) {
         router.back();
       }
-      // console.log('Current page:', currentRoute);
+      console.log('Current page:', currentRoute);
     } else {
-      router.push('/home'); // fallback to home if no history
+      router.replace('/home'); // fallback to home if no history
     }
   };
   return (
     <TouchableOpacity
-      className='absolute bottom-10 left-0 right-0 mt-10 mx-5 bg-slate-900 rounded-xl py-3.5 flex flex-row  items-center justify-center z-50'
+      className='absolute bottom-0 right-0 w-auto mx-5 my-5 bg-backBtn rounded-full px-2 py-3.5 flex flex-row  items-center justify-center z-50'
       onPress={handleGoBack}
       activeOpacity={0.7}
       accessibilityRole='button'
@@ -51,9 +83,12 @@ const GoBackBtn = () => {
       <Image
         source={icons.arrow}
         className='size-5 mr-2 rotate-180'
-        tintColor='#ff0031'
+        tintColor='#000000'
       />
-      <Text className='text-accent' style={{ fontFamily: 'outfit-bold' }}>
+      <Text
+        className='text-darkest'
+        style={{ fontFamily: 'outfit-bold' }}
+      >
         Go back
       </Text>
     </TouchableOpacity>

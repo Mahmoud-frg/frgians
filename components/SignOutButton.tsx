@@ -20,13 +20,18 @@ const SignOutButton = () => {
   };
 
   return (
-    <View className='w-96 mx-auto mt-10 rounded-lg shadow-2xl'>
+    <View className='w-96 mx-auto my-10 rounded-lg shadow-2xl'>
       <TouchableOpacity
         onPress={handleSignOut}
-        className='w-full px-4 py-3 rounded-lg bg-title'
+        className='w-full px-4 py-3 rounded-lg bg-coSecondary'
         style={styles.shadow}
       >
-        <Text className='mx-auto text-xl font-bold text-white'>Sign out</Text>
+        <Text
+          className='mx-auto text-xl text-darkest'
+          style={{ fontFamily: 'outfit-bold' }}
+        >
+          Log out
+        </Text>
       </TouchableOpacity>
     </View>
   );
@@ -36,7 +41,7 @@ export default SignOutButton;
 
 const styles = StyleSheet.create({
   shadow: {
-    shadowColor: '#000',
+    shadowColor: '#fff',
     shadowOffset: {
       width: 0,
       height: 3,

@@ -16,21 +16,23 @@ const CategoryItem = ({ onCategoryPress, category }: CategoryItemProps) => {
       activeOpacity={0.7}
     >
       <View
-        className='w-20 h-20 mr-2 mb-2 p-3 bg-iconBG rounded-3xl'
+        className='w-32 h-32 mr-2 mb-5 p-3 items-center bg-iconBG rounded-2xl'
         style={styles.shadow}
       >
         <Image
           source={{ uri: iconUrl }}
           className='w-14 h-14'
-          resizeMode='contain'
+          resizeMode='cover'
+          tintColor='#ffffff'
         />
+        <Text
+          className='text-sm mt-3 text-center color-secondary'
+          style={{ fontFamily: 'outfit-regular' }}
+          numberOfLines={2}
+        >
+          {name}
+        </Text>
       </View>
-      <Text
-        className='text-sm mt-1 text-center'
-        style={{ fontFamily: 'outfit-medium' }}
-      >
-        {name}
-      </Text>
     </TouchableOpacity>
   );
 };
@@ -39,7 +41,7 @@ export default CategoryItem;
 
 const styles = StyleSheet.create({
   shadow: {
-    shadowColor: '#000',
+    shadowColor: '#000000',
     shadowOffset: {
       width: 0,
       height: 3,

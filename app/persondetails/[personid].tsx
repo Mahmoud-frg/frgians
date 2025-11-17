@@ -26,6 +26,8 @@ import Intro from '@/components/PersonDetails/Intro';
 import ActionButton from '@/components/PersonDetails/ActionButton';
 import GoBackBtn from '@/components/GoBackBtn';
 import { useNavigationState } from '@react-navigation/native';
+import { Colors } from '@/constants/Colors';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const PersonDetails = () => {
   const navigation = useNavigation();
@@ -35,7 +37,7 @@ const PersonDetails = () => {
   );
   const [loading, setLoading] = useState(false);
 
-  // Used to get persons list by category
+  // Used to get persons list by id
   const GetPersonDetailsById = async (
     personid: string,
     setPersonDetails: React.Dispatch<
@@ -81,7 +83,20 @@ const PersonDetails = () => {
 
   return (
     <View className='bg-primary flex-1'>
-      {/* <ScrollView contentContainerStyle={{ paddingBottom: 80 }}>
+      <LinearGradient
+        colors={[
+          '#001920', // deep navy black (bottom base)
+          '#00181f', // dark desaturated blue
+          '#093341', // mid-indigo layer
+          '#1E4451', // soft vibrant blue
+          '#2B505D', // light glow blue (top-right)
+        ]}
+        locations={[0, 0.25, 0.5, 0.75, 1]} // smooth transitions
+        start={{ x: 0, y: 1 }} // bottom left
+        end={{ x: 1, y: 0 }} // top right
+        style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+      >
+        {/* <ScrollView contentContainerStyle={{ paddingBottom: 80 }}>
         <View className='w-full h-screen bg-primary px-5 pt-5'>
           <View className='relative self-center w-full'>
             <View className='z-10 absolute  w-full flex self-center'>
@@ -93,7 +108,7 @@ const PersonDetails = () => {
               </View>
             </View>
 
-            <View className='z-0 rounded-xl overflow-hidden shadow-md bg-white mt-28 w-full self-center'>
+            <View className='z-0 rounded-xl overflow-hidden shadow-md bg-secondary mt-28 w-full self-center'>
               <View className='px-6 mt-24'>
                 <Text
                   className='text-3xl text-center'
@@ -136,36 +151,37 @@ const PersonDetails = () => {
           </View>
         </View>
       </ScrollView> */}
-      {loading ? (
-        <ActivityIndicator
-          size='large'
-          color='#ff0031'
-          className='mt-[50%] self-center'
-        />
-      ) : (
-        <View>
-          <ScrollView contentContainerStyle={{ paddingBottom: 80 }}>
-            {personDetails ? (
-              <>
-                {/* Intro */}
-                <Intro personDetails={personDetails} />
+        {loading ? (
+          <ActivityIndicator
+            size='large'
+            color={Colors.coSecondary}
+            className='mt-[50%] self-center'
+          />
+        ) : (
+          <View>
+            <ScrollView contentContainerStyle={{ paddingBottom: 80 }}>
+              {personDetails ? (
+                <>
+                  {/* Intro */}
+                  <Intro personDetails={personDetails} />
 
-                {/* Action buttons */}
-                <ActionButton personDetails={personDetails} />
-              </>
-            ) : (
-              <ActivityIndicator
-                size='large'
-                color='#ff0031'
-                className='mt-[50%] self-center'
-              />
-            )}
-          </ScrollView>
-        </View>
-      )}
+                  {/* Action buttons */}
+                  <ActionButton personDetails={personDetails} />
+                </>
+              ) : (
+                <ActivityIndicator
+                  size='large'
+                  color={Colors.coSecondary}
+                  className='mt-[50%] self-center'
+                />
+              )}
+            </ScrollView>
+          </View>
+        )}
 
-      {/* Go back button */}
-      <GoBackBtn />
+        {/* Go back button */}
+        <GoBackBtn />
+      </LinearGradient>
     </View>
   );
 };
@@ -173,7 +189,7 @@ const PersonDetails = () => {
 export default PersonDetails;
 const styles = StyleSheet.create({
   shadow: {
-    shadowColor: '#000',
+    shadowColor: '#fff',
     shadowOffset: {
       width: 0,
       height: 3,

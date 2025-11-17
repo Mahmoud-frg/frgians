@@ -81,7 +81,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({ personDetails }) => {
   };
 
   return (
-    <View className='bg-white rounded-b-3xl p-5 mb-5'>
+    <View className='bg-search rounded-b-3xl p-5 mb-5'>
       <FlatList
         data={actionBtnMenu}
         keyExtractor={(item) => item.id.toString()}
@@ -90,9 +90,12 @@ const ActionButton: React.FC<ActionButtonProps> = ({ personDetails }) => {
             className='items-center ml-2 mr-5'
             onPress={() => OnPressHandler(item)}
           >
-            <Image source={item.icon} className='w-16 h-16' />
+            <Image
+              source={item.icon}
+              className='w-16 h-16'
+            />
             <Text
-              className='text-sm mt-2'
+              className='text-sm mt-2 color-darkest'
               style={{ fontFamily: 'outfit-regular' }}
             >
               {item.name}
@@ -110,7 +113,7 @@ export default ActionButton;
 
 const styles = StyleSheet.create({
   shadow: {
-    shadowColor: '#000',
+    shadowColor: '#fff',
     shadowOffset: {
       width: 0,
       height: 3,

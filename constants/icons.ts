@@ -14,6 +14,7 @@ import updateInfo from '@/assets/icons/updateInfo.png';
 import share from '@/assets/icons/share.png';
 import addNews from '@/assets/icons/add-news.png';
 import deleNews from '@/assets/icons/delete-news.png';
+import deleAcc from '@/assets/icons/deleteAccount.png';
 
 export const icons = {
   home,
@@ -32,4 +33,5 @@ export const icons = {
   share,
   addNews,
   deleNews,
+  deleAcc,
 };

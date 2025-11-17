@@ -17,54 +17,65 @@ import Animated, {
 } from 'react-native-reanimated';
 import SliderBrandCard, { SCREEN_WIDTH } from '../BrandsSlider/SliderBrandCard';
 import SliderPagination from './SliderPagination';
+import { Colors } from '@/constants/Colors';
+import { collection, getDocs, query } from 'firebase/firestore';
+import { db } from '@/configs/FirebaseConfig';
 
-export type ImageSliderType = {
-  id: number;
-  title: string;
-  image: ImageSourcePropType;
-  description: string;
-};
+// export type BrandsType = {
+//   id: number;
+//   name: string;
+//   founded: string;
+//   imageUrl: ImageSourcePropType;
+//   motto: string;
+// };
 
 type Props = {
-  itemList: ImageSliderType[];
+  itemList: BrandsType[];
 };
 
-export const ImageSlider = [
+export const BrandsList = [
   {
     id: 1,
-    title: 'SKECHERS',
-    image: images.skx,
-    description: 'The comfort technology company',
+    name: 'SKECHERS',
+    founded: '1992',
+    imageUrl: images.skx,
+    motto: 'The comfort technology company',
   },
   {
     id: 2,
-    title: 'ANTA',
-    image: images.anta,
-    description: 'Anta sports brand',
+    name: 'ANTA',
+    founded: '1994',
+    imageUrl: images.anta,
+    motto: 'Anta sports brand',
   },
   {
     id: 3,
-    title: 'UMBRO',
-    image: images.umbro,
-    description: 'Umbro sports brand',
+    name: 'ECCO',
+    founded: '1963',
+    imageUrl: images.ecco,
+    motto: 'Shoes for life',
   },
   {
     id: 4,
-    title: 'ECCO',
-    image: images.ecco,
-    description: 'Shoes for life',
+    name: 'UMBRO',
+    founded: '1924',
+    imageUrl: images.umbro,
+    motto: 'Umbro sports brand',
   },
   {
     id: 5,
-    title: 'COLE HAAN',
-    image: images.cole,
-    description: 'Cole haan brand',
+    name: 'COLE HAAN',
+    founded: '1928',
+    imageUrl: images.cole,
+    motto: 'Cole haan brand',
   },
 ];
 
 const SliderBrands = ({ itemList }: Props) => {
+  const [brandsList, setBrandsList] = useState<BrandsType[]>([]);
+
   const [paginationIndex, setPaginationIndex] = useState(0);
-  const [data, setData] = useState<ImageSliderType[]>([]);
+  const [data, setData] = useState<BrandsType[]>([]);
   const [isAutoPlay, setIsAutoPlay] = useState(true);
   const [loading, setLoading] = useState(false);
 
@@ -74,39 +85,77 @@ const SliderBrands = ({ itemList }: Props) => {
   const scrollX = useSharedValue(0);
   const offset = useSharedValue(0);
 
+  // ✅ Get brands from Firestore and set as constant-like array
+  const GetBrandsList = async () => {
+    try {
+      setLoading(true);
+      const q = query(collection(db, 'brands'));
+      const querySnapshot = await getDocs(q);
+      const fetchedBrands: BrandsType[] = [];
+      querySnapshot.forEach((doc) => {
+        fetchedBrands.push(doc.data() as BrandsType);
+      });
+
+      // Treat it as a "constant array" after fetching
+      setBrandsList(fetchedBrands);
+      setData([...fetchedBrands, ...fetchedBrands, ...fetchedBrands]);
+    } catch (error) {
+      console.error('Error fetching brands:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    setLoading(true);
+    GetBrandsList();
+  }, []);
 
-    setTimeout(() => {
-      // Duplicate data for smooth looping
-      setData([...itemList, ...itemList, ...itemList]);
-    }, 1000);
+  // useEffect(() => {
+  //   setLoading(true);
 
-    setLoading(false);
-  }, [itemList]);
+  //   setTimeout(() => {
+  //     // Duplicate data for smooth looping
+  //     setData([...itemList, ...itemList, ...itemList]);
+  //   }, 500);
 
+  //   setLoading(false);
+  // }, [itemList]);
+
+  // ✅ Auto scroll animation
   useEffect(() => {
-    if (isAutoPlay) {
+    if (isAutoPlay && data.length > 0) {
       interval.current = setInterval(() => {
         const nextOffset = offset.value + SCREEN_WIDTH;
         const maxOffset = SCREEN_WIDTH * (data.length - 1);
 
-        if (nextOffset >= maxOffset) {
-          offset.value = 0;
-        } else {
-          offset.value = nextOffset;
-        }
+        offset.value = nextOffset >= maxOffset ? 0 : nextOffset;
       }, 4000);
     }
-
-    return () => {
-      clearInterval(interval.current ?? undefined);
-    };
+    return () => clearInterval(interval.current ?? undefined);
   }, [isAutoPlay, data.length]);
 
   useDerivedValue(() => {
     scrollTo(ref, offset.value, 0, true);
   });
+
+  // useEffect(() => {
+  //   if (isAutoPlay) {
+  //     interval.current = setInterval(() => {
+  //       const nextOffset = offset.value + SCREEN_WIDTH;
+  //       const maxOffset = SCREEN_WIDTH * (data.length - 1);
+
+  //       if (nextOffset >= maxOffset) {
+  //         offset.value = 0;
+  //       } else {
+  //         offset.value = nextOffset;
+  //       }
+  //     }, 4000);
+  //   }
+
+  //   return () => {
+  //     clearInterval(interval.current ?? undefined);
+  //   };
+  // }, [isAutoPlay, data.length]);
 
   const onScrollHandler = useAnimatedScrollHandler({
     onScroll: (e) => {
@@ -143,15 +192,15 @@ const SliderBrands = ({ itemList }: Props) => {
   ]);
 
   return (
-    <>
+    <View className='w-full h-auto py-4 mt-1'>
       {data ? (
-        <View className='mt-5'>
+        <View className=''>
           <View className='flex flex-row justify-between p-2'>
             <Text
               className='text-2xl font-semibold color-title pl-4'
               style={{ fontFamily: 'outfit-bold' }}
             >
-              Our Brands
+              Brands
             </Text>
           </View>
 
@@ -200,11 +249,11 @@ const SliderBrands = ({ itemList }: Props) => {
       ) : (
         <ActivityIndicator
           size='large'
-          color='#ff0031'
+          color={Colors.coSecondary}
           className='mt-[50%] self-center'
         />
       )}
-    </>
+    </View>
   );
 };
 

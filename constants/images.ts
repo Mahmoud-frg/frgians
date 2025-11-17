@@ -1,7 +1,9 @@
 import logo from '@/assets/images/logo.png';
 import FRGians from '@/assets/images/FRGlogo.png';
+import FRGiansBG from '@/assets/images/FRG-icon-760.png';
 import FRGblack from '@/assets/images/frg-black.png';
 import FRGwhite from '@/assets/images/frg-white.png';
+import FRGwhiteBG from '@/assets/images/frgbackground.webp';
 import FRGhalflogo from '@/assets/images/FRGhalflogo.png';
 import FRGlogoLeftHalf from '@/assets/images/FRGlogoLeftHalf.png';
 import Call from '@/assets/images/actionBtns/Call.png';
@@ -13,17 +15,24 @@ import Share from '@/assets/images/actionBtns/Share.png';
 import AA from '@/assets/images/leaders/AA.png';
 import WH from '@/assets/images/leaders/WH.png';
 import MH from '@/assets/images/leaders/MH.png';
-import skx from '@/assets/images/brands/skechers_logo_main.jpg';
-import anta from '@/assets/images/brands/anta_logo_main.png';
-import umbro from '@/assets/images/brands/umbro_logo_main.png';
-import ecco from '@/assets/images/brands/ecco_logo_main.png';
-import cole from '@/assets/images/brands/cole_logo_main.jpg';
+import skx from '@/assets/images/brands/skechers_logo_main_2.png';
+import anta from '@/assets/images/brands/anta_logo_main_2.png';
+import umbro from '@/assets/images/brands/umbro_logo_main_2.png';
+import ecco from '@/assets/images/brands/ecco_logo_main_2.png';
+import cole from '@/assets/images/brands/cole_logo_main_2.png';
+
+import darkBG from '@/assets/images/bg/dark_design_bg.png';
+import darkBG2 from '@/assets/images/bg/dark_design_bg2-4.png';
+import darkBG3 from '@/assets/images/bg/dark_design_bg3-4.png';
+import blueBG from '@/assets/images/bg/blue_design_bg.jpg';
 
 export const images = {
   logo,
   FRGians,
+  FRGiansBG,
   FRGblack,
   FRGwhite,
+  FRGwhiteBG,
   FRGhalflogo,
   FRGlogoLeftHalf,
   Call,
@@ -40,4 +49,8 @@ export const images = {
   umbro,
   ecco,
   cole,
+  darkBG,
+  darkBG2,
+  darkBG3,
+  blueBG,
 };

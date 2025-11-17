@@ -2,6 +2,9 @@
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "strict": true,
+    "jsx": "react-native",
+    "module": "commonjs",
+    "forceConsistentCasingInFileNames": true,
     "paths": {
       "@/*": ["./*"]
     }
@@ -14,3 +17,31 @@
     "nativewind-env.d.ts"
   ]
 }
+
+// {
+//   "extends": "expo/tsconfig.base",
+//   "compilerOptions": {
+//     "target": "ESNext",
+//     "module": "Node16",
+//     "moduleResolution": "Node16",
+//     "strict": true,
+//     "jsx": "react-jsx",
+//     "allowJs": true,
+//     "esModuleInterop": true,
+//     "skipLibCheck": true,
+//     "noEmit": true,
+//     "resolveJsonModule": true,
+//     "forceConsistentCasingInFileNames": true,
+//     "types": ["node"],
+//     "paths": {
+//       "@/*": ["./*"]
+//     }
+//   },
+//   "include": [
+//     "**/*.ts",
+//     "**/*.tsx",
+//     ".expo/types/**/*.ts",
+//     "expo-env.d.ts",
+//     "nativewind-env.d.ts"
+//   ]
+// }

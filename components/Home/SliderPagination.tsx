@@ -1,6 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import { ImageSliderType } from './SliderBrands';
 import Animated, {
   Extrapolation,
   interpolate,
@@ -10,7 +9,7 @@ import Animated, {
 import { SCREEN_WIDTH } from '../BrandsSlider/SliderBrandCard';
 
 type Props = {
-  items: ImageSliderType[];
+  items: BrandsType[];
   paginationIndex: number;
   scrollX: SharedValue<number>;
 };

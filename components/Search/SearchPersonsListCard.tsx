@@ -18,7 +18,6 @@ const SearchPersonsListCard = ({ person }: PersonsListCardProps) => {
   });
 
   const PersonCardPressHandler = (code: string) => () => {
-    // console.log('Current page:', currentRoute); // logs correct page at render time
     router.push({
       pathname: '/persondetails/[personid]',
       params: { personid: code, from: 'search' },
@@ -32,60 +31,66 @@ const SearchPersonsListCard = ({ person }: PersonsListCardProps) => {
       activeOpacity={0.7}
     >
       <View
-        className='flex flex-row w-full m-2  bg-white rounded-xl items-center self-center'
+        className='flex flex-row w-full m-2 bg-darkest rounded-xl items-center self-center'
         style={styles.shadow}
       >
         <Image
-          source={
-            person?.imageUrl === ''
-              ? images.FRGwhite
-              : { uri: person?.imageUrl }
-          }
-          className='w-32 h-32 rounded-2xl m-1'
+          source={imageUrl ? { uri: imageUrl } : images.FRGiansBG}
+          className='w-32 h-32 rounded-2xl m-1 bg-white'
         />
-        <View className='w-[70%] m-3'>
+        <View className='w-[65%] m-3'>
           <Text
             className='text-2xl text-secondary'
             style={{ fontFamily: 'outfit-bold' }}
           >
-            {person?.name}
+            {name}
           </Text>
           <Text
-            className='text-l color-slate-600'
+            className='text-l color-coSecondary'
             style={{ fontFamily: 'outfit-medium' }}
           >
-            {person?.title}
+            {person.title}
           </Text>
           <Text
-            className='text-l color-title'
+            className='text-l color-coTitle'
             style={{ fontFamily: 'outfit-medium' }}
           >
-            Joined @ {person?.joinDate}
+            Joined @ {person.joinDate}
           </Text>
-          <Text
-            className='text-l color-secondary'
-            style={{ fontFamily: 'outfit-semi-bold' }}
-          >
-            {person?.frgMail}
-          </Text>
+          <View className='flex flex-row justify-between items-center'>
+            <Text
+              className='w-[75%] text-l color-secondary'
+              style={{ fontFamily: 'outfit-semi-bold' }}
+            >
+              {person.frgMail}
+            </Text>
+            <View className='w-auto h-auto px-2 rounded-full bg-dataHolder text-center content-center items-center self-center'>
+              <Text
+                className='text-2xl color-coTitle'
+                style={{ fontFamily: 'outfit-extra-bold' }}
+              >
+                {code}
+              </Text>
+            </View>
+          </View>
         </View>
       </View>
     </TouchableOpacity>
   );
 };
 
-export default SearchPersonsListCard;
+// 🧠 Wrap with memo to prevent unnecessary re-renders
+export default React.memo(SearchPersonsListCard);
 
 const styles = StyleSheet.create({
   shadow: {
-    shadowColor: '#000',
+    shadowColor: '#fff',
     shadowOffset: {
       width: 0,
       height: 3,
     },
     shadowOpacity: 0.27,
     shadowRadius: 4.65,
-
     elevation: 6,
   },
 });

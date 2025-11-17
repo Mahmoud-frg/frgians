@@ -10,6 +10,7 @@ import React, { useEffect, useState } from 'react';
 import { db } from '@/configs/FirebaseConfig';
 import { collection, getDocs, query } from 'firebase/firestore';
 import TrendingCard from '../LeadersSlider/TrendingCard';
+import { Colors } from '@/constants/Colors';
 
 const SliderPersons = () => {
   const [sliderList, setSliderList] = useState<SliderType[]>([]);
@@ -32,14 +33,14 @@ const SliderPersons = () => {
   }, []);
 
   return (
-    <>
+    <View className='w-full h-auto py-4 mt-1'>
       {sliderList ? (
-        <View className='p-2 mt-5'>
+        <View className='p-2'>
           <Text
             className='text-2xl font-semibold color-title pl-4'
             style={{ fontFamily: 'outfit-bold' }}
           >
-            # Our Leaders
+            #Board Members
           </Text>
           {/* <FlatList
       data={sliderList}
@@ -74,11 +75,11 @@ const SliderPersons = () => {
       ) : (
         <ActivityIndicator
           size='large'
-          color='#ff0031'
+          color={Colors.coSecondary}
           className='mt-[50%] self-center'
         />
       )}
-    </>
+    </View>
   );
 };
 

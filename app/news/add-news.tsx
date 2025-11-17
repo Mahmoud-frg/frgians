@@ -8,6 +8,10 @@ import {
   ScrollView,
   ToastAndroid,
   ActivityIndicator,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Platform,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import GoBackBtn from '@/components/GoBackBtn';
@@ -19,6 +23,10 @@ import { collection, doc, getDocs, query, setDoc } from 'firebase/firestore';
 import { db, storage } from '@/configs/FirebaseConfig';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { useUser } from '@clerk/clerk-expo';
+import Toast from 'react-native-toast-message';
+import { LinearGradient } from 'expo-linear-gradient';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { Colors } from '@/constants/Colors';
 
 const AddNews = () => {
   const navigation = useNavigation();
@@ -32,6 +40,8 @@ const AddNews = () => {
   const [title, setTitle] = useState('');
   const [newsHead, setNewsHead] = useState('');
   const [newsBody, setNewsBody] = useState('');
+  const [commentable, setCommentable] = useState(true);
+  // const [seenBy, setSeenBy] = useState<[]>([]);
 
   const [loading, setLoading] = useState(false);
 
@@ -86,6 +96,18 @@ const AddNews = () => {
   };
 
   const AddNewsHandler = async () => {
+    // Input validation
+    if (!title.trim() || !newsHead.trim() || !newsBody.trim()) {
+      // ToastAndroid.show('⚠️ Please fill in all fields!', ToastAndroid.SHORT);
+      Toast.show({
+        type: 'error', // 'error' for warning-style toast (usually red)
+        text1: '⚠️ Please fill in all fields!',
+        position: 'bottom',
+        visibilityTime: 2000, // similar to ToastAndroid.SHORT
+      });
+      return;
+    }
+
     setLoading(true);
 
     // Only update image if the user actually selected a new one
@@ -135,6 +157,7 @@ const AddNews = () => {
   const saveNewsDetails = async (imgUrl: string) => {
     await setDoc(doc(db, 'newsList', index.toString()), {
       body: newsBody,
+      commentable: commentable,
       date: date,
       head: newsHead,
       imgUrl: imgUrl,
@@ -149,80 +172,113 @@ const AddNews = () => {
 
     console.log('Adding news with index:', index);
 
-    ToastAndroid.show('News Added Successfully...', ToastAndroid.LONG);
+    // ToastAndroid.show('News Added Successfully...', ToastAndroid.LONG);
+    Toast.show({
+      type: 'success', // Use 'success' for positive actions
+      text1: 'News Added Successfully...',
+      position: 'bottom',
+      visibilityTime: 4000, // Equivalent to ToastAndroid.LONG
+    });
 
     router.back();
   };
 
-  if (loading) {
+  const toggleCommentable = () => {
+    setCommentable((prev) => !prev); // flip the value
+    console.log('Toggled to:', !commentable);
+  };
+
+  if (!index || loading) {
     return (
       <View className='flex-1 justify-center items-center'>
         <ActivityIndicator
           size='large'
-          color='#000'
+          color={Colors.coSecondary}
         />
       </View>
     );
-  }
-
-  return (
-    <View className='bg-primary flex-1'>
-      {/* Logo */}
-      <View className='flex flex-row mx-5 justify-between items-center'>
-        <Text
-          className='color-title text-3xl'
-          style={{ fontFamily: 'outfit-bold' }}
+  } else {
+    return (
+      <View className='bg-primary flex-1'>
+        <LinearGradient
+          colors={[
+            '#001920', // deep navy black (bottom base)
+            '#00181f', // dark desaturated blue
+            '#093341', // mid-indigo layer
+            '#1E4451', // soft vibrant blue
+            '#2B505D', // light glow blue (top-right)
+          ]}
+          locations={[0, 0.25, 0.5, 0.75, 1]} // smooth transitions
+          start={{ x: 0, y: 1 }} // bottom left
+          end={{ x: 1, y: 0 }} // top right
+          style={{ height: '100%', width: '100%' }}
         >
-          Add News
-        </Text>
-        <Logo />
-      </View>
-      <Text
-        className='text-lg color-slate-600 ml-5 mb-3'
-        style={{ fontFamily: 'outfit-medium' }}
-      >
-        Fill all details to add a news
-      </Text>
-
-      {/* Information (details) about a news */}
-      <ScrollView className='mb-28 bg-slate-100 rounded-3xl'>
-        <View className='flex items-center'>
-          <TouchableOpacity
-            className='w-[96%] h-80 m-5 items-center bg-black rounded-2xl'
-            onPress={() => ImagePickHandler()}
-          >
-            <Image
-              source={!image ? images.FRGblack : { uri: image }}
-              className='w-full h-80 rounded-2xl'
-              resizeMode='contain'
-            />
-          </TouchableOpacity>
-          <Text
-            className='text-lg color-slate-600 ml-5 mt-1'
-            style={{ fontFamily: 'outfit-medium' }}
-          >
-            Press on the image to replace it
-          </Text>
-        </View>
-
-        <View className='gap-2 mt-3 flex items-center'>
-          <View className='flex flex-row items-center w-[90%] justify-between'>
+          {/* Logo */}
+          <View className='flex flex-row mx-5 justify-between items-center'>
             <Text
-              className='text-xl mr-3 text-title'
+              className='color-coTitle text-3xl'
               style={{ fontFamily: 'outfit-bold' }}
             >
-              Title
+              Add News
             </Text>
-            <TextInput
-              className='w-[80%] pl-3 py-3 rounded-lg bg-white border-2 border-zinc-300'
-              onChangeText={(val) => setTitle(val)}
-              value={title}
-              placeholder='title'
-              style={{ fontFamily: 'outfit-regular' }}
-            />
+            <Logo />
           </View>
+          <Text
+            className='text-lg color-coSecondary ml-5 mb-3'
+            style={{ fontFamily: 'outfit-medium' }}
+          >
+            Fill all details to add a news
+          </Text>
 
-          {/* <View className='flex flex-row items-center w-[90%] justify-between'>
+          <KeyboardAvoidingView
+            style={{ flex: 1 }}
+            behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+            keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0}
+          >
+            <TouchableWithoutFeedback
+              onPress={Keyboard.dismiss}
+              accessible={false}
+            >
+              {/* Information (details) about a news */}
+              <ScrollView className='mb-24 bg-dataHolder rounded-3xl'>
+                <View className='flex items-center'>
+                  <TouchableOpacity
+                    className='w-[96%] h-80 m-5 items-center bg-black rounded-2xl'
+                    onPress={() => ImagePickHandler()}
+                  >
+                    <Image
+                      source={!image ? images.FRGwhiteBG : { uri: image }}
+                      className='w-full h-80 rounded-2xl'
+                      resizeMode='contain'
+                    />
+                  </TouchableOpacity>
+                  <Text
+                    className='text-lg color-coTitle ml-5 mt-1'
+                    style={{ fontFamily: 'outfit-medium' }}
+                  >
+                    Press on the image to replace it
+                  </Text>
+                </View>
+
+                <View className='gap-2 mt-3 flex items-center'>
+                  <View className='flex flex-row items-center w-[90%] justify-between'>
+                    <Text
+                      className='text-xl mr-3 text-coTitle'
+                      style={{ fontFamily: 'outfit-bold' }}
+                    >
+                      Title
+                    </Text>
+                    <TextInput
+                      className='w-[80%] pl-3 py-3 rounded-lg bg-secondary border-2 border-zinc-300'
+                      onChangeText={(val) => setTitle(val)}
+                      value={title}
+                      placeholder='title'
+                      placeholderTextColor='#1234'
+                      style={{ fontFamily: 'outfit-regular' }}
+                    />
+                  </View>
+
+                  {/* <View className='flex flex-row items-center w-[90%] justify-between'>
             <Text
               className='text-xl mr-3 text-title'
               style={{ fontFamily: 'outfit-bold' }}
@@ -230,7 +286,7 @@ const AddNews = () => {
               Date
             </Text>
             <TextInput
-              className='w-[75%] pl-3 py-3 rounded-lg bg-white border-2 border-zinc-300'
+              className='w-[75%] pl-3 py-3 rounded-lg bg-title border-2 border-zinc-300'
               onChangeText={(val) => setDate(val)}
               value={date}
               placeholder='ex: 01-01-2001'
@@ -238,67 +294,109 @@ const AddNews = () => {
             />
           </View> */}
 
-          <View className='flex flex-row items-center w-[90%] justify-between'>
-            <Text
-              className='text-xl mr-3 text-title'
-              style={{ fontFamily: 'outfit-bold' }}
-            >
-              Head
-            </Text>
-            <TextInput
-              className='w-[80%] pl-3 py-3 rounded-lg bg-white border-2 border-zinc-300'
-              onChangeText={(val) => setNewsHead(val)}
-              value={newsHead}
-              placeholder='news head'
-              style={{ fontFamily: 'outfit-regular' }}
-            />
-          </View>
+                  <View className='flex flex-row items-center w-[90%] justify-between'>
+                    <Text
+                      className='text-xl mr-3 text-coTitle'
+                      style={{ fontFamily: 'outfit-bold' }}
+                    >
+                      Head
+                    </Text>
+                    <TextInput
+                      className='w-[80%] pl-3 py-3 rounded-lg bg-secondary border-2 border-zinc-300'
+                      onChangeText={(val) => setNewsHead(val)}
+                      value={newsHead}
+                      placeholder='news head'
+                      placeholderTextColor='#1234'
+                      style={{ fontFamily: 'outfit-regular' }}
+                    />
+                  </View>
 
-          <View className='flex flex-row items-center w-[90%] justify-between'>
-            <Text
-              className='text-xl mr-3 text-title'
-              style={{ fontFamily: 'outfit-bold' }}
-            >
-              Body
-            </Text>
-            <TextInput
-              className='w-[80%] h-24 pl-3 rounded-lg bg-white border-2 border-zinc-300'
-              onChangeText={(val) => setNewsBody(val)}
-              value={newsBody}
-              placeholder='news body'
-              multiline
-              numberOfLines={5}
-              style={{ fontFamily: 'outfit-regular' }}
-            />
-          </View>
-        </View>
+                  <View className='flex flex-row items-center w-[90%] justify-between'>
+                    <Text
+                      className='text-xl mr-3 text-coTitle'
+                      style={{ fontFamily: 'outfit-bold' }}
+                    >
+                      Body
+                    </Text>
+                    <TextInput
+                      className='w-[80%] h-24 pl-3 rounded-lg bg-secondary border-2 border-zinc-300'
+                      onChangeText={(val) => setNewsBody(val)}
+                      value={newsBody}
+                      placeholder='news body'
+                      placeholderTextColor='#1234'
+                      multiline
+                      numberOfLines={5}
+                      style={{
+                        fontFamily: 'outfit-regular',
+                        writingDirection:
+                          newsBody && /^[\u0600-\u06FF]/.test(newsBody.trim())
+                            ? 'rtl'
+                            : 'ltr',
+                        textAlign:
+                          newsBody && /^[\u0600-\u06FF]/.test(newsBody.trim())
+                            ? 'right'
+                            : 'left',
+                      }}
+                    />
+                  </View>
 
-        <View className='my-5 flex items-center'>
-          <TouchableOpacity
-            disabled={loading}
-            onPress={() => AddNewsHandler()}
-            className='w-96 py-3 rounded-lg bg-title'
-          >
-            {loading && (
-              <ActivityIndicator
-                size='large'
-                color='white'
-                className='self-center'
-              />
-            )}
-            {!loading && (
-              <Text className='mx-auto text-xl font-bold text-white'>
-                Add News
-              </Text>
-            )}
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
+                  <TouchableOpacity
+                    className='flex flex-row self-center items-center w-auto py-1 px-4 mx-2 my-2 rounded-3xl bg-backBtn'
+                    onPress={toggleCommentable}
+                  >
+                    <Ionicons
+                      name={
+                        commentable
+                          ? 'chatbubble-ellipses-outline'
+                          : 'chatbubble-ellipses'
+                      }
+                      size={30}
+                      color={commentable ? '#ffffff' : '#192440'}
+                    />
+                    <Text
+                      className={`text-lg ml-2 ${
+                        commentable ? 'text-title' : 'text-darkest'
+                      } `}
+                      style={{ fontFamily: 'outfit-bold' }}
+                    >
+                      {commentable ? 'No comments' : 'Comments'}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
 
-      {/* Go back button */}
-      <GoBackBtn />
-    </View>
-  );
+                <View className='my-5 flex items-center'>
+                  <TouchableOpacity
+                    disabled={loading}
+                    onPress={() => AddNewsHandler()}
+                    className='w-96 py-3 rounded-lg bg-coSecondary'
+                  >
+                    {loading && (
+                      <ActivityIndicator
+                        size='large'
+                        color='title'
+                        className='self-center'
+                      />
+                    )}
+                    {!loading && (
+                      <Text
+                        className='mx-auto text-xl text-darkest'
+                        style={{ fontFamily: 'outfit-bold' }}
+                      >
+                        Add News
+                      </Text>
+                    )}
+                  </TouchableOpacity>
+                </View>
+              </ScrollView>
+            </TouchableWithoutFeedback>
+          </KeyboardAvoidingView>
+
+          {/* Go back button */}
+          <GoBackBtn />
+        </LinearGradient>
+      </View>
+    );
+  }
 };
 
 export default AddNews;
