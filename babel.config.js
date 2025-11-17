@@ -7,3 +7,9 @@ module.exports = function (api) {
     ],
   };
 };
+
+// plugins: [
+//       "nativewind/babel", // This line is crucial
+//       'react-native-reanimated/plugin', // Keep this plugin for reanimated
+//       'expo-router/babel',
+//     ],
