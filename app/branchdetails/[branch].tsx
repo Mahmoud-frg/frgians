@@ -153,7 +153,7 @@ const BranchDetails = () => {
                           ? images.FRGwhiteBG
                           : { uri: branchDetails?.imgUrl }
                       }
-                      className='rounded-3xl object-cover h-full w-full shadow-md self-center border-4 border-darkest'
+                      className='rounded-3xl object-cover h-full w-full shadow-md self-center border-4 border-leaderBorder'
                       resizeMode='cover'
                     />
                   </View>

@@ -3,6 +3,10 @@
 # dependencies
 node_modules/
 
+# Firebase Admin SDK and other secret files
+frgians-firebase-adminsdk-fbsvc-*.json
+*.env
+
 # Expo
 .expo/
 dist/
