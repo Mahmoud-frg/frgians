@@ -1,15 +1,11 @@
+// babel.config.js
 module.exports = function (api) {
   api.cache(true);
   return {
-    presets: [['babel-preset-expo', { jsxImportSource: 'nativewind' }]],
+    presets: ['babel-preset-expo'],
     plugins: [
-      'react-native-reanimated/plugin', // must be last
+      'nativewind/babel',
+      'react-native-reanimated/plugin', // Reanimated MUST be the last plugin
     ],
   };
 };
-
-// plugins: [
-//       "nativewind/babel", // This line is crucial
-//       'react-native-reanimated/plugin', // Keep this plugin for reanimated
-//       'expo-router/babel',
-//     ],
