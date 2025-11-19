@@ -5,6 +5,8 @@
     "jsx": "react-native",
     "module": "commonjs",
     "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
     "paths": {
       "@/*": ["./*"]
     }
