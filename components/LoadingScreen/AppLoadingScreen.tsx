@@ -46,7 +46,7 @@ const AppLoadingScreen = ({ onFinish }: Props) => {
           style={styles.image}
           resizeMode='contain'
         />
-        <Text style={styles.text}>...Loading...</Text>
+        <Text style={styles.text}>..Loading..</Text>
         <ActivityIndicator
           size='large'
           // color={Colors.coSecondary}
@@ -68,6 +68,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#ffffff',
+    width: 'auto',
   },
   image: {
     width: 150,
@@ -79,6 +80,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '600',
     color: '#444444',
+    width: 'auto',
   },
   spinner: {
     marginTop: 10,
