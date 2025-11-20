@@ -1,7 +1,6 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import { images } from '@/constants/images';
-import { rgbaColor } from 'react-native-reanimated/lib/typescript/Colors';
 
 type NewsCardItemProps = {
   news: newsListType;
