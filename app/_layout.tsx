@@ -103,7 +103,7 @@ const RootLayout = () => {
         />
         <SafeAreaProvider>
           <SafeAreaView
-            style={{ flex: 1, backgroundColor: '#000000' }}
+            style={{ flex: 1, backgroundColor: Colors.dark.statusbar }}
             edges={['top']}
           >
             <InitialLayout fontsLoaded={fontsLoaded} />

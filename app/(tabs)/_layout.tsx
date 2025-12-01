@@ -48,7 +48,7 @@ const TabLayout = () => {
             backgroundColor: Colors.dark.statusbar, // your actual background color
             borderTopLeftRadius: 50,
             borderTopRightRadius: 50,
-            height: 50,
+            height: 55,
             paddingBottom: 3,
             paddingTop: 3,
             borderTopWidth: 0,

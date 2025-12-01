@@ -156,7 +156,7 @@ export default function PwReset() {
                 <>
                   <View className='gap-2'>
                     <TextInput
-                      className='w-full px-4 py-3 rounded-lg bg-title color-darkest border border-dataHolder'
+                      className='w-full px-4 py-3 rounded-lg bg-secondary color-darkest border border-dataHolder'
                       style={{ fontFamily: 'outfit-bold' }}
                       value={code}
                       placeholder='Reset password code...'
@@ -164,7 +164,7 @@ export default function PwReset() {
                       onChangeText={(code) => setCode(code)}
                     />
                     <TextInput
-                      className='w-full px-4 py-3 rounded-lg bg-title color-darkest border border-dataHolder'
+                      className='w-full px-4 py-3 rounded-lg bg-secondary color-darkest border border-dataHolder'
                       style={{ fontFamily: 'outfit-bold' }}
                       value={password}
                       placeholder='new password'

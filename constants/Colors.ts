@@ -13,7 +13,7 @@ export const Colors = {
   },
   dark: {
     text: '#FFFFFF',
-    statusbar: '#093341',
+    statusbar: '#183F4E',
     tint: tintColorDark,
     icon: '#CD1818',
     tabIconDefault: '#D1D4C9',

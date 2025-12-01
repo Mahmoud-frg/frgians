@@ -510,7 +510,7 @@ const NewsDetails = () => {
                             ? images.FRGwhiteBG
                             : { uri: newsDetails?.imgUrl }
                         }
-                        className='rounded-3xl object-cover h-full w-full shadow-md self-center border-4 border-[#093341]'
+                        className='rounded-3xl object-cover h-full w-full shadow-md self-center border-4 border-[#183F4E]'
                         resizeMode='cover'
                       />
                     </View>
@@ -519,11 +519,13 @@ const NewsDetails = () => {
                   <View className='rounded-xl overflow-hidden shadow-md bg-catPersons mt-60 w-full self-center'>
                     <View className='px-6 mt-24'>
                       <Text
-                        className='text-3xl text-center color-title'
+                        className='text-3xl text-center color-title mb-5'
                         style={{ fontFamily: 'outfit-bold' }}
                       >
                         {newsDetails?.title}
                       </Text>
+
+                      <View className='w-96 h-0.5 bg-darkest self-center rounded-3xl opacity-25' />
 
                       <Text
                         className='text-[#F05929] text-2xl text-left mt-5'
