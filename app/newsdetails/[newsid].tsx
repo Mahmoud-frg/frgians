@@ -14,6 +14,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Platform,
+  Animated,
 } from 'react-native';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -81,6 +82,21 @@ const NewsDetails = () => {
   const [showCommentBox, setShowCommentBox] = useState(false);
   const [commentId, setCommentId] = useState('');
   const [refreshing, setRefreshing] = useState(false);
+
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
+
+  useEffect(() => {
+    const showSub = Keyboard.addListener('keyboardDidShow', (e) => {
+      setKeyboardHeight(e.endCoordinates.height + 15); // extra margin
+    });
+    const hideSub = Keyboard.addListener('keyboardDidHide', () => {
+      setKeyboardHeight(0);
+    });
+    return () => {
+      showSub.remove();
+      hideSub.remove();
+    };
+  }, []);
 
   const commentInputRef = useRef<TextInput>(null);
   const { user } = useUser();
@@ -444,45 +460,35 @@ const NewsDetails = () => {
   };
 
   return (
-    <View className='bg-primary flex-1'>
-      <LinearGradient
-        colors={[
-          '#001920', // deep navy black (bottom base)
-          '#00181f', // dark desaturated blue
-          '#093341', // mid-indigo layer
-          '#1E4451', // soft vibrant blue
-          '#2B505D', // light glow blue (top-right)
-        ]}
-        locations={[0, 0.25, 0.5, 0.75, 1]} // smooth transitions
-        start={{ x: 0, y: 1 }} // bottom left
-        end={{ x: 1, y: 0 }} // top right
-        style={{ flex: 1, height: '100%', width: '100%' }}
-      >
-        {/* Logo */}
-        <View className='flex flex-row mx-5 justify-between items-center'>
-          <Text
-            className='color-coTitle text-3xl'
-            style={{ fontFamily: 'outfit-bold' }}
-          >
-            News
-          </Text>
-          <Logo />
-        </View>
-        <KeyboardAwareScrollView
-          className='mb-20 rounded-3xl'
-          contentContainerStyle={{ flexGrow: 1 }}
-          keyboardShouldPersistTaps='handled'
-          enableAutomaticScroll={true}
-          extraScrollHeight={150}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-              tintColor='#F8CA37' // loader color iOS
-              colors={[Colors.coSecondary]} // loader colors Android
-            />
-          }
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+    >
+      <View className='bg-primary flex-1'>
+        <LinearGradient
+          colors={[
+            '#001920', // deep navy black (bottom base)
+            '#00181f', // dark desaturated blue
+            '#093341', // mid-indigo layer
+            '#1E4451', // soft vibrant blue
+            '#2B505D', // light glow blue (top-right)
+          ]}
+          locations={[0, 0.25, 0.5, 0.75, 1]} // smooth transitions
+          start={{ x: 0, y: 1 }} // bottom left
+          end={{ x: 1, y: 0 }} // top right
+          style={{ flex: 1, height: '100%', width: '100%' }}
         >
+          {/* Logo */}
+          <View className='flex flex-row mx-5 justify-between items-center'>
+            <Text
+              className='color-coTitle text-3xl'
+              style={{ fontFamily: 'outfit-bold' }}
+            >
+              News
+            </Text>
+            <Logo />
+          </View>
+
           <Text
             className='text-lg color-coTitle ml-5 mb-2'
             style={{ fontFamily: 'outfit-medium' }}
@@ -490,98 +496,100 @@ const NewsDetails = () => {
             Here is the news
           </Text>
 
-          {/* Information (details) about the news */}
-          {/* <ScrollView className='mb-24 bg-slate-100 rounded-3xl'> */}
-          {loading ? (
-            <ActivityIndicator
-              size='large'
-              color={Colors.coSecondary}
-              className='mt-[50%] self-center'
-            />
-          ) : (
-            <>
-              <View className='flex items-center'>
-                <View className='relative self-center w-[95%] my-2'>
-                  <View className='z-10 absolute  w-full flex self-center'>
-                    <View className='self-center h-80 w-[90%] bg-darkest rounded-3xl'>
-                      <Image
-                        source={
-                          newsDetails?.imgUrl === ''
-                            ? images.FRGwhiteBG
-                            : { uri: newsDetails?.imgUrl }
-                        }
-                        className='rounded-3xl object-cover h-full w-full shadow-md self-center border-4 border-[#183F4E]'
-                        resizeMode='cover'
-                      />
-                    </View>
-                  </View>
-
-                  <View className='rounded-xl overflow-hidden shadow-md bg-catPersons mt-60 w-full self-center'>
-                    <View className='px-6 mt-24'>
-                      <Text
-                        className='text-3xl text-center color-title mb-5'
-                        style={{ fontFamily: 'outfit-bold' }}
-                      >
-                        {newsDetails?.title}
-                      </Text>
-
-                      <View className='w-96 h-0.5 bg-darkest self-center rounded-3xl opacity-25' />
-
-                      <Text
-                        className='text-[#F05929] text-2xl text-left mt-5'
-                        style={{ fontFamily: 'outfit-bold' }}
-                      >
-                        {newsDetails?.head}
-                      </Text>
-
-                      <Text
-                        className='text-left text-coSecondary'
-                        style={{ fontFamily: 'outfit-bold' }}
-                      >
-                        {newsDetails?.date}
-                      </Text>
-
-                      <Text
-                        className='text-xl text-left text-title py-5'
-                        style={{
-                          fontFamily: 'outfit-regular',
-                          writingDirection:
-                            newsDetails?.body &&
-                            /^[\u0600-\u06FF]/.test(newsDetails?.body.trim())
-                              ? 'rtl'
-                              : 'ltr',
-                          textAlign:
-                            newsDetails?.body &&
-                            /^[\u0600-\u06FF]/.test(newsDetails?.body.trim())
-                              ? 'right'
-                              : 'left',
-                        }}
-                      >
-                        {newsDetails?.body}
-                      </Text>
-                    </View>
-
-                    <View className='w-96 h-0.5 bg-darkest self-center rounded-3xl opacity-25' />
-
-                    <View className='self-center flex-row w-full justify-between px-2'>
-                      <View className='flex flex-row self-start items-center w-auto py-1 px-4 mx-2 '>
-                        <Ionicons
-                          name='thumbs-up'
-                          size={15}
-                          color='#00181f'
+          <KeyboardAwareScrollView
+            style={{ flex: 1 }}
+            contentContainerStyle={{ paddingBottom: 150 }}
+            keyboardShouldPersistTaps='handled'
+            enableOnAndroid={true} // important for Android
+            extraScrollHeight={Platform.OS === 'ios' ? 0 : 0} // space above keyboard
+            keyboardOpeningTime={0} // faster scroll
+            showsVerticalScrollIndicator={false}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+                tintColor='#F8CA37' // loader color iOS
+                colors={[Colors.coSecondary]} // loader colors Android
+              />
+            }
+          >
+            {/* Information (details) about the news */}
+            {/* <ScrollView className='mb-24 bg-slate-100 rounded-3xl'> */}
+            {loading ? (
+              <ActivityIndicator
+                size='large'
+                color={Colors.coSecondary}
+                className='mt-[50%] self-center'
+              />
+            ) : (
+              <>
+                <View className='flex items-center'>
+                  <View className='relative self-center w-[95%] my-2'>
+                    <View className='z-10 absolute  w-full flex self-center'>
+                      <View className='self-center h-80 w-[90%] bg-darkest rounded-3xl'>
+                        <Image
+                          source={
+                            newsDetails?.imgUrl === ''
+                              ? images.FRGwhiteBG
+                              : { uri: newsDetails?.imgUrl }
+                          }
+                          className='rounded-3xl object-cover h-full w-full shadow-md self-center border-4 border-[#183F4E]'
+                          resizeMode='cover'
                         />
+                      </View>
+                    </View>
+
+                    <View className='rounded-xl overflow-hidden shadow-md bg-catPersons mt-60 w-full self-center'>
+                      <View className='px-6 mt-24'>
                         <Text
-                          className='text-lg ml-2 text-title'
-                          style={{ fontFamily: 'outfit-regular' }}
+                          className='text-3xl text-center color-title mb-5'
+                          style={{ fontFamily: 'outfit-bold' }}
                         >
-                          {newsDetails?.likes?.length ?? 0}
+                          {newsDetails?.title}
+                        </Text>
+
+                        <View className='w-96 h-0.5 bg-darkest self-center rounded-3xl opacity-25' />
+
+                        <Text
+                          className='text-[#F05929] text-2xl text-left mt-5'
+                          style={{ fontFamily: 'outfit-bold' }}
+                        >
+                          {newsDetails?.head}
+                        </Text>
+
+                        <Text
+                          className='text-left text-coSecondary'
+                          style={{ fontFamily: 'outfit-bold' }}
+                        >
+                          {newsDetails?.date}
+                        </Text>
+
+                        <Text
+                          className='text-xl text-left text-title py-5'
+                          style={{
+                            fontFamily: 'outfit-regular',
+                            writingDirection:
+                              newsDetails?.body &&
+                              /^[\u0600-\u06FF]/.test(newsDetails?.body.trim())
+                                ? 'rtl'
+                                : 'ltr',
+                            textAlign:
+                              newsDetails?.body &&
+                              /^[\u0600-\u06FF]/.test(newsDetails?.body.trim())
+                                ? 'right'
+                                : 'left',
+                          }}
+                        >
+                          {newsDetails?.body}
                         </Text>
                       </View>
 
-                      {newsDetails?.commentable && (
-                        <View className='flex flex-row self-end items-center w-auto py-1 px-4 mx-2 '>
+                      <View className='w-96 h-0.5 bg-darkest self-center rounded-3xl opacity-25' />
+
+                      <View className='self-center flex-row w-full justify-between px-2'>
+                        <View className='flex flex-row self-start items-center w-auto py-1 px-4 mx-2 '>
                           <Ionicons
-                            name='chatbubble-ellipses'
+                            name='thumbs-up'
                             size={15}
                             color='#00181f'
                           />
@@ -589,143 +597,106 @@ const NewsDetails = () => {
                             className='text-lg ml-2 text-title'
                             style={{ fontFamily: 'outfit-regular' }}
                           >
-                            {newsDetails?.comments?.length ?? 0}
+                            {newsDetails?.likes?.length ?? 0}
                           </Text>
                         </View>
-                      )}
-                    </View>
 
-                    <View className='self-center flex-row mb-4'>
-                      <TouchableOpacity
-                        className='flex flex-row self-center items-center w-auto py-1 px-4 mx-2 rounded-3xl bg-dataHolder'
-                        onPress={toggleLike}
-                      >
-                        <Ionicons
-                          name={liked ? 'thumbs-up' : 'thumbs-up-outline'}
-                          size={30}
-                          color={liked ? '#00181f' : '#ffffff'}
-                        />
-                        <Text
-                          className={`text-lg ml-2 ${
-                            liked ? 'text-darkest' : 'text-white'
-                          }`}
-                          style={{ fontFamily: 'outfit-bold' }}
-                        >
-                          {liked ? 'Liked' : 'Like'}
-                        </Text>
-                      </TouchableOpacity>
+                        {newsDetails?.commentable && (
+                          <View className='flex flex-row self-end items-center w-auto py-1 px-4 mx-2 '>
+                            <Ionicons
+                              name='chatbubble-ellipses'
+                              size={15}
+                              color='#00181f'
+                            />
+                            <Text
+                              className='text-lg ml-2 text-title'
+                              style={{ fontFamily: 'outfit-regular' }}
+                            >
+                              {newsDetails?.comments?.length ?? 0}
+                            </Text>
+                          </View>
+                        )}
+                      </View>
 
-                      {newsDetails?.commentable && (
+                      <View className='self-center flex-row mb-4'>
                         <TouchableOpacity
                           className='flex flex-row self-center items-center w-auto py-1 px-4 mx-2 rounded-3xl bg-dataHolder'
-                          onPress={WriteCommentHandler}
+                          onPress={toggleLike}
                         >
                           <Ionicons
-                            name='chatbubble-ellipses'
+                            name={liked ? 'thumbs-up' : 'thumbs-up-outline'}
                             size={30}
-                            color='#ffffff'
+                            color={liked ? '#00181f' : '#ffffff'}
                           />
                           <Text
-                            className='text-lg ml-2 text-white'
+                            className={`text-lg ml-2 ${
+                              liked ? 'text-darkest' : 'text-white'
+                            }`}
                             style={{ fontFamily: 'outfit-bold' }}
                           >
-                            Comment
+                            {liked ? 'Liked' : 'Like'}
                           </Text>
                         </TouchableOpacity>
-                      )}
 
-                      {(isOrginAdmin || personDetails?.isAdmin) && (
-                        <TouchableOpacity
-                          className='flex flex-row self-center items-center w-auto py-1 px-4 mx-2 rounded-3xl bg-dataHolder'
-                          onPress={() => NewsDeleteHandler()}
-                        >
-                          <Ionicons
-                            name='trash'
-                            size={30}
-                            color='red'
-                          />
-                          <Text
-                            className='text-lg ml-2 text-white'
-                            style={{ fontFamily: 'outfit-bold' }}
+                        {newsDetails?.commentable && (
+                          <TouchableOpacity
+                            className='flex flex-row self-center items-center w-auto py-1 px-4 mx-2 rounded-3xl bg-dataHolder'
+                            onPress={WriteCommentHandler}
                           >
-                            Delete
-                          </Text>
-                        </TouchableOpacity>
-                      )}
+                            <Ionicons
+                              name='chatbubble-ellipses'
+                              size={30}
+                              color='#ffffff'
+                            />
+                            <Text
+                              className='text-lg ml-2 text-white'
+                              style={{ fontFamily: 'outfit-bold' }}
+                            >
+                              Comment
+                            </Text>
+                          </TouchableOpacity>
+                        )}
+
+                        {(isOrginAdmin || personDetails?.isAdmin) && (
+                          <TouchableOpacity
+                            className='flex flex-row self-center items-center w-auto py-1 px-4 mx-2 rounded-3xl bg-dataHolder'
+                            onPress={() => NewsDeleteHandler()}
+                          >
+                            <Ionicons
+                              name='trash'
+                              size={30}
+                              color='red'
+                            />
+                            <Text
+                              className='text-lg ml-2 text-white'
+                              style={{ fontFamily: 'outfit-bold' }}
+                            >
+                              Delete
+                            </Text>
+                          </TouchableOpacity>
+                        )}
+                      </View>
                     </View>
                   </View>
                 </View>
-              </View>
 
-              {showCommentBox && (
-                <>
-                  {/* <View className='w-96 h-0.5 bg-darkest self-center rounded-full opacity-50' /> */}
-
-                  <View className='flex-row items-center w-[95%] m-2 self-center rounded-full bg-dataHolder border-2 border-search'>
-                    <TextInput
-                      ref={commentInputRef}
-                      className='flex-1 py-4 pl-3 text-coTitle'
-                      onChangeText={setCommentText}
-                      value={commentText}
-                      placeholder='Write a comment...'
-                      placeholderTextColor='#ffffff'
-                      multiline
-                      numberOfLines={5}
-                      style={{
-                        fontFamily: 'outfit-regular',
-                        fontSize: Platform.OS === 'ios' ? 20 : 15,
-                        writingDirection:
-                          commentText &&
-                          /^[\u0600-\u06FF]/.test(commentText.trim())
-                            ? 'rtl'
-                            : 'ltr',
-                        textAlign:
-                          commentText &&
-                          /^[\u0600-\u06FF]/.test(commentText.trim())
-                            ? 'right'
-                            : 'left',
-                      }}
-                    />
-
-                    {commentText.trim().length > 0 && (
-                      <TouchableOpacity
-                        className='flex flex-row items-center w-auto mx-2 my-2 py-1 px-4 rounded-3xl bg-backBtn'
-                        onPress={submitComment}
+                {newsDetails?.commentable && (
+                  <View className='bg-search rounded-2xl mx-3 px-4'>
+                    <View className='flex flex-row self-center items-center w-auto py-1 px-4 mx-2 '>
+                      <Ionicons
+                        name='chatbubble-ellipses'
+                        size={15}
+                        color='#00181f'
+                      />
+                      <Text
+                        className='text-lg ml-2 text-darkest'
+                        style={{ fontFamily: 'outfit-regular' }}
                       >
-                        <Ionicons
-                          name='send'
-                          size={30}
-                          color='#00181f'
-                        />
-                        {/* <Text
-                          className='text-sm ml-2 text-darkest'
-                          style={{ fontFamily: 'outfit-bold' }}
-                        >
-                          Submit
-                        </Text> */}
-                      </TouchableOpacity>
-                    )}
-                  </View>
-                </>
-              )}
+                        What's on your mind about this news ?
+                      </Text>
+                    </View>
 
-              {newsDetails?.commentable && (
-                <View className='bg-search rounded-2xl mx-3 px-4'>
-                  <View className='flex flex-row self-center items-center w-auto py-1 px-4 mx-2 '>
-                    <Ionicons
-                      name='chatbubble-ellipses'
-                      size={15}
-                      color='#00181f'
-                    />
-                    <Text
-                      className='text-lg ml-2 text-darkest'
-                      style={{ fontFamily: 'outfit-regular' }}
-                    >
-                      What's on your mind about this news ?
-                    </Text>
-                  </View>
-
-                  {/* 
+                    {/* 
                     <View className='flex flex-row my-2'>
                       <Image
                         source={images.FRGwhiteBG}
@@ -748,96 +719,159 @@ const NewsDetails = () => {
                       </View>
                     </View> */}
 
-                  {comments.length > 0 && (
-                    <View className='w-96 h-0.5 bg-darkest self-center rounded-full opacity-50' />
-                  )}
+                    {comments.length > 0 && (
+                      <View className='w-96 h-0.5 bg-darkest self-center rounded-full opacity-50' />
+                    )}
 
-                  {loading ? (
-                    <ActivityIndicator
-                      size='small'
-                      color={Colors.coSecondary}
-                      style={{ marginRight: 10 }}
-                    />
-                  ) : (
-                    <>
-                      {comments.map((item, index) => (
-                        <View
-                          key={item.id || index}
-                          className='flex flex-row m-1'
-                        >
-                          <Image
-                            // source={
-                            //   item.image ? { uri: item.image } : images.FRGians
-                            // }
+                    {loading ? (
+                      <ActivityIndicator
+                        size='small'
+                        color={Colors.coSecondary}
+                        style={{ marginRight: 10 }}
+                      />
+                    ) : (
+                      <>
+                        {comments.map((item, index) => (
+                          <View
+                            key={item.id || index}
+                            className='flex flex-row m-1'
+                          >
+                            <Image
+                              // source={
+                              //   item.image ? { uri: item.image } : images.FRGians
+                              // }
 
-                            source={
-                              imageUrls[item.id.toString()]
-                                ? { uri: imageUrls[item.id.toString()]! }
-                                : images.FRGians
-                            }
-                            className='w-12 h-12 m-1 rounded-full bg-title'
-                          />
+                              source={
+                                imageUrls[item.id.toString()]
+                                  ? { uri: imageUrls[item.id.toString()]! }
+                                  : images.FRGians
+                              }
+                              className='w-12 h-12 m-1 rounded-full bg-title'
+                            />
 
-                          <View className='flex max-w-[85%] m-1 p-2 rounded-3xl bg-dataHolder'>
-                            <View className='flex-row justify-between items-center'>
-                              <Text
-                                className='text-xl text-coTitle'
-                                style={{ fontFamily: 'outfit-bold' }}
-                              >
-                                {item.name}
-                              </Text>
-
-                              {item.userId === code && (
-                                <TouchableOpacity
-                                  onPress={() => confirmDeleteComment(item.id)}
+                            <View className='flex max-w-[85%] m-1 p-2 rounded-3xl bg-dataHolder'>
+                              <View className='flex-row justify-between items-center'>
+                                <Text
+                                  className='text-xl text-coTitle'
+                                  style={{ fontFamily: 'outfit-bold' }}
                                 >
-                                  <Ionicons
-                                    name='trash'
-                                    size={16}
-                                    color='red'
-                                  />
-                                </TouchableOpacity>
-                              )}
-                            </View>
+                                  {item.name}
+                                </Text>
 
-                            <Text
-                              className='text-start text-secondary'
-                              style={{
-                                fontFamily: 'outfit-semi-bold',
-                                //   writingDirection:
-                                //     item.text &&
-                                //     /^[\u0600-\u06FF]/.test(item.text.trim())
-                                //       ? 'rtl'
-                                //       : 'ltr',
-                                //   textAlign:
-                                //     item.text &&
-                                //     /^[\u0600-\u06FF]/.test(item.text.trim())
-                                //       ? 'right'
-                                //       : 'left',
-                              }}
-                            >
-                              {item.text}
-                            </Text>
-                            <Text
-                              className='text-xs text-coSecondary'
-                              style={{ fontFamily: 'outfit-regular' }}
-                            >
-                              {item.createdAt ? item.createdAt : 'Sending...'}
-                            </Text>
+                                {item.userId === code && (
+                                  <TouchableOpacity
+                                    onPress={() =>
+                                      confirmDeleteComment(item.id)
+                                    }
+                                  >
+                                    <Ionicons
+                                      name='trash'
+                                      size={16}
+                                      color='red'
+                                    />
+                                  </TouchableOpacity>
+                                )}
+                              </View>
+
+                              <Text
+                                className='text-start text-secondary'
+                                style={{
+                                  fontFamily: 'outfit-semi-bold',
+                                  //   writingDirection:
+                                  //     item.text &&
+                                  //     /^[\u0600-\u06FF]/.test(item.text.trim())
+                                  //       ? 'rtl'
+                                  //       : 'ltr',
+                                  //   textAlign:
+                                  //     item.text &&
+                                  //     /^[\u0600-\u06FF]/.test(item.text.trim())
+                                  //       ? 'right'
+                                  //       : 'left',
+                                }}
+                              >
+                                {item.text}
+                              </Text>
+                              <Text
+                                className='text-xs text-coSecondary'
+                                style={{ fontFamily: 'outfit-regular' }}
+                              >
+                                {item.createdAt ? item.createdAt : 'Sending...'}
+                              </Text>
+                            </View>
                           </View>
-                        </View>
-                      ))}
-                    </>
+                        ))}
+                      </>
+                    )}
+                  </View>
+                )}
+              </>
+            )}
+          </KeyboardAwareScrollView>
+
+          {/* Comment Input – WhatsApp style */}
+          {showCommentBox && (
+            <>
+              {/* <View className='w-96 h-0.5 bg-darkest self-center rounded-full opacity-50' /> */}
+
+              <View
+                style={{
+                  position: 'absolute',
+                  bottom: keyboardHeight,
+                  left: 0,
+                  right: 0,
+                  paddingHorizontal: 5,
+                  paddingVertical: 5,
+                  backgroundColor: 'transparent',
+                }}
+              >
+                <View className='flex-row items-center w-[95%] self-center rounded-full bg-darker border-2 border-search'>
+                  <TextInput
+                    ref={commentInputRef}
+                    className='flex-1 py-4 pl-3 text-secondary'
+                    onChangeText={setCommentText}
+                    value={commentText}
+                    placeholder='Write a comment...'
+                    placeholderTextColor='#ffffff'
+                    multiline
+                    numberOfLines={5}
+                    style={{
+                      fontFamily: 'outfit-regular',
+                      fontSize: Platform.OS === 'ios' ? 20 : 15,
+                      writingDirection:
+                        commentText &&
+                        /^[\u0600-\u06FF]/.test(commentText.trim())
+                          ? 'rtl'
+                          : 'ltr',
+                      textAlign:
+                        commentText &&
+                        /^[\u0600-\u06FF]/.test(commentText.trim())
+                          ? 'right'
+                          : 'left',
+                    }}
+                  />
+
+                  {commentText.trim().length > 0 && (
+                    <TouchableOpacity
+                      className='flex flex-row items-center w-auto mx-2 my-2 py-1 px-4 rounded-3xl bg-backBtn'
+                      onPress={submitComment}
+                    >
+                      <Ionicons
+                        name='send'
+                        size={30}
+                        color='#00181f'
+                      />
+                    </TouchableOpacity>
                   )}
                 </View>
-              )}
+              </View>
             </>
           )}
-        </KeyboardAwareScrollView>
-        {/* Go back button */}
-        <GoBackBtn />
-      </LinearGradient>
-    </View>
+
+          {/* Go back button */}
+          <GoBackBtn />
+        </LinearGradient>
+      </View>
+    </KeyboardAvoidingView>
   );
 };
 

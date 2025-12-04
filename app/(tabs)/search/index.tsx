@@ -20,7 +20,16 @@ import {
   useLocalSearchParams,
   useNavigation,
 } from 'expo-router';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import {
+  collection,
+  query,
+  orderBy,
+  startAt,
+  endAt,
+  limit,
+  where,
+  getDocs,
+} from 'firebase/firestore';
 import { db } from '@/configs/FirebaseConfig';
 import SearchPersonsList from '@/components/Search/SearchPersonsList';
 import { useNavigationState } from '@react-navigation/native';
@@ -44,35 +53,106 @@ const search = () => {
   );
 
   // Used to get persons list by name or code
+  // const searchPersonsByNameOrCode = async (searchText: string) => {
+  //   setLoading(true);
+  //   setPersons([]);
+
+  //   try {
+  //     const q = query(collection(db, 'personsList'));
+  //     const querySnapshot = await getDocs(q);
+
+  //     const results: personsListType[] = [];
+
+  //     const lowerSearch = searchText.toLowerCase();
+
+  //     querySnapshot.forEach((doc) => {
+  //       const data = doc.data() as personsListType;
+
+  //       const name = data.name?.toLowerCase() || '';
+  //       const code = String(data.code);
+
+  //       if (name.includes(lowerSearch) || code.includes(searchText)) {
+  //         results.push({ id: doc.id, ...data });
+  //       }
+  //     });
+
+  //     // Now, sort the array by 'arrangement' in ascending order
+  //     const sortedPersons = results.sort(
+  //       (a, b) => Number(a.arrangement) - Number(b.arrangement)
+  //     );
+
+  //     // Update the state with the sorted array
+  //     setPersons(sortedPersons);
+
+  //     // setPersons(results);
+  //   } catch (error) {
+  //     console.error('Search error:', error);
+  //   }
+
+  //   setLoading(false);
+  // };
+
+  // Used to get persons list by name or code
+  let searchTimeout: ReturnType<typeof setTimeout>;
+
   const searchPersonsByNameOrCode = async (searchText: string) => {
-    setLoading(true);
-    setPersons([]);
+    // ✅ debounce - prevents spamming Firestore
+    clearTimeout(searchTimeout);
 
-    try {
-      const q = query(collection(db, 'personsList'));
-      const querySnapshot = await getDocs(q);
+    searchTimeout = setTimeout(async () => {
+      if (!searchText.trim()) {
+        setPersons([]);
+        return;
+      }
 
-      const results: personsListType[] = [];
+      setLoading(true);
 
-      const lowerSearch = searchText.toLowerCase();
+      try {
+        const lowerSearch = searchText.toLowerCase();
 
-      querySnapshot.forEach((doc) => {
-        const data = doc.data() as personsListType;
+        let q;
 
-        const name = data.name?.toLowerCase() || '';
-        const code = String(data.code);
-
-        if (name.includes(lowerSearch) || code.includes(searchText)) {
-          results.push({ id: doc.id, ...data });
+        // ✅ Search by CODE (starts with)
+        if (!isNaN(Number(searchText))) {
+          q = query(
+            collection(db, 'personsList'),
+            orderBy('code_str'),
+            startAt(searchText),
+            endAt(searchText + '\uf8ff'),
+            limit(30)
+          );
         }
-      });
 
-      setPersons(results);
-    } catch (error) {
-      console.error('Search error:', error);
-    }
+        // ✅ Search by NAME
+        else {
+          q = query(
+            collection(db, 'personsList'),
+            orderBy('name_lower'),
+            startAt(lowerSearch),
+            endAt(lowerSearch + '\uf8ff'),
+            limit(30)
+          );
+        }
 
-    setLoading(false);
+        const snapshot = await getDocs(q);
+
+        const results = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...(doc.data() as personsListType),
+        }));
+
+        // ✅ Final safety sort
+        results.sort((a, b) =>
+          a.name.localeCompare(b.name, 'en', { sensitivity: 'base' })
+        );
+
+        setPersons(results);
+      } catch (error) {
+        console.error('Search error:', error);
+      }
+
+      setLoading(false);
+    }, 400); // 400ms debounce
   };
 
   useEffect(() => {

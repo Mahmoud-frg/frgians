@@ -140,11 +140,13 @@ interface personsListType {
   departmentId: number;
   frgMail: string;
   code: number;
+  code_str: string;
   imageUrl: string;
   joinDate: string;
   jobDescription: string;
   dateOfBirth: string;
   name: string;
+  name_lower: string;
   reportTo: string;
   title: string;
   isAdmin: boolean;
