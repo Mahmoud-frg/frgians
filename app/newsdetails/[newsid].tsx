@@ -90,7 +90,7 @@ const NewsDetails = () => {
       setKeyboardHeight(e.endCoordinates.height + 15); // extra margin
     });
     const hideSub = Keyboard.addListener('keyboardDidHide', () => {
-      setKeyboardHeight(0);
+      setKeyboardHeight(60);
     });
     return () => {
       showSub.remove();
@@ -489,16 +489,9 @@ const NewsDetails = () => {
             <Logo />
           </View>
 
-          <Text
-            className='text-lg color-coTitle ml-5 mb-2'
-            style={{ fontFamily: 'outfit-medium' }}
-          >
-            Here is the news
-          </Text>
-
           <KeyboardAwareScrollView
             style={{ flex: 1 }}
-            contentContainerStyle={{ paddingBottom: 150 }}
+            contentContainerStyle={{ paddingBottom: 125 }}
             keyboardShouldPersistTaps='handled'
             enableOnAndroid={true} // important for Android
             extraScrollHeight={Platform.OS === 'ios' ? 0 : 0} // space above keyboard
@@ -513,6 +506,13 @@ const NewsDetails = () => {
               />
             }
           >
+            <Text
+              className='text-lg color-coTitle ml-5 mb-2'
+              style={{ fontFamily: 'outfit-medium' }}
+            >
+              Here is the news
+            </Text>
+
             {/* Information (details) about the news */}
             {/* <ScrollView className='mb-24 bg-slate-100 rounded-3xl'> */}
             {loading ? (

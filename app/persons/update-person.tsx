@@ -14,7 +14,7 @@ import {
   Keyboard,
   Platform,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { db, storage } from '@/configs/FirebaseConfig';
 import {
   collection,
@@ -37,7 +37,6 @@ import {
   deleteObject,
 } from 'firebase/storage';
 import { useUser } from '@clerk/clerk-expo';
-import RNPickerSelect from 'react-native-picker-select';
 import { Colors } from '@/constants/Colors';
 import { useFocusEffect } from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
@@ -314,6 +313,8 @@ const UpdatePerson = () => {
     console.log('Toggled to:', !isAdmin);
   };
 
+  const scrollViewRef = useRef<any>(null);
+
   if (!code || loading || !personData) {
     return (
       <View className='flex-1 justify-center items-center'>
@@ -358,8 +359,17 @@ const UpdatePerson = () => {
 
           <KeyboardAwareFlatList
             data={[{}]} // dummy single item to render the full form
-            enableAutomaticScroll={true}
             keyExtractor={() => 'form'}
+            enableAutomaticScroll={true}
+            contentContainerStyle={{
+              flexGrow: 1,
+              borderRadius: 24,
+              paddingBottom: 150, // VERY IMPORTANT
+            }}
+            keyboardShouldPersistTaps='handled'
+            enableOnAndroid
+            extraScrollHeight={0}
+            nestedScrollEnabled
             renderItem={() => (
               <View className='mb-24 bg-dataHolder rounded-3xl'>
                 {/* Information (details) about a person */}
@@ -398,6 +408,15 @@ const UpdatePerson = () => {
                       value={name}
                       onChangeText={setName}
                       style={{ fontFamily: 'outfit-regular' }}
+                      onFocus={() => {
+                        setTimeout(() => {
+                          (scrollViewRef.current as any)?.scrollToPosition(
+                            0,
+                            250,
+                            true
+                          );
+                        }, 300);
+                      }}
                     />
                   </View>
 
@@ -415,6 +434,15 @@ const UpdatePerson = () => {
                       placeholder={personData?.title || 'title'}
                       placeholderTextColor='#42424290'
                       style={{ fontFamily: 'outfit-regular' }}
+                      onFocus={() => {
+                        setTimeout(() => {
+                          (scrollViewRef.current as any)?.scrollToPosition(
+                            0,
+                            250,
+                            true
+                          );
+                        }, 300);
+                      }}
                     />
                   </View>
 
@@ -526,6 +554,15 @@ const UpdatePerson = () => {
                       placeholder={personData?.reportTo || 'report to'}
                       placeholderTextColor='#42424290'
                       style={{ fontFamily: 'outfit-regular' }}
+                      onFocus={() => {
+                        setTimeout(() => {
+                          (scrollViewRef.current as any)?.scrollToPosition(
+                            0,
+                            250,
+                            true
+                          );
+                        }, 300);
+                      }}
                     />
                   </View>
 
@@ -544,6 +581,15 @@ const UpdatePerson = () => {
                       placeholder='arrangement'
                       placeholderTextColor='#42424290'
                       style={{ fontFamily: 'outfit-regular' }}
+                      onFocus={() => {
+                        setTimeout(() => {
+                          (scrollViewRef.current as any)?.scrollToPosition(
+                            0,
+                            250,
+                            true
+                          );
+                        }, 300);
+                      }}
                     />
                   </View>
 
@@ -561,6 +607,15 @@ const UpdatePerson = () => {
                       placeholder={personData?.contact || 'mobile'}
                       placeholderTextColor='#42424290'
                       style={{ fontFamily: 'outfit-regular' }}
+                      onFocus={() => {
+                        setTimeout(() => {
+                          (scrollViewRef.current as any)?.scrollToPosition(
+                            0,
+                            250,
+                            true
+                          );
+                        }, 300);
+                      }}
                     />
                   </View>
 
@@ -578,6 +633,15 @@ const UpdatePerson = () => {
                       placeholder={personData?.emergency || 'emergency contact'}
                       placeholderTextColor='#42424290'
                       style={{ fontFamily: 'outfit-regular' }}
+                      onFocus={() => {
+                        setTimeout(() => {
+                          (scrollViewRef.current as any)?.scrollToPosition(
+                            0,
+                            250,
+                            true
+                          );
+                        }, 300);
+                      }}
                     />
                   </View>
 
@@ -598,6 +662,15 @@ const UpdatePerson = () => {
                       }
                       placeholderTextColor='#42424290'
                       style={{ fontFamily: 'outfit-regular' }}
+                      onFocus={() => {
+                        setTimeout(() => {
+                          (scrollViewRef.current as any)?.scrollToPosition(
+                            0,
+                            250,
+                            true
+                          );
+                        }, 300);
+                      }}
                     />
                   </View>
 
@@ -616,6 +689,15 @@ const UpdatePerson = () => {
                       placeholder={personData?.address || 'ex: nasr city'}
                       placeholderTextColor='#42424290'
                       style={{ fontFamily: 'outfit-regular' }}
+                      onFocus={() => {
+                        setTimeout(() => {
+                          (scrollViewRef.current as any)?.scrollToPosition(
+                            0,
+                            250,
+                            true
+                          );
+                        }, 300);
+                      }}
                     />
                   </View>
 
@@ -633,6 +715,15 @@ const UpdatePerson = () => {
                       placeholder={personData?.joinDate || 'ex: 01-01-2001'}
                       placeholderTextColor='#42424290'
                       style={{ fontFamily: 'outfit-regular' }}
+                      onFocus={() => {
+                        setTimeout(() => {
+                          (scrollViewRef.current as any)?.scrollToPosition(
+                            0,
+                            250,
+                            true
+                          );
+                        }, 300);
+                      }}
                     />
                   </View>
 
@@ -650,6 +741,15 @@ const UpdatePerson = () => {
                       placeholder={personData?.dateOfBirth || 'ex: 01-01-2001'}
                       placeholderTextColor='#42424290'
                       style={{ fontFamily: 'outfit-regular' }}
+                      onFocus={() => {
+                        setTimeout(() => {
+                          (scrollViewRef.current as any)?.scrollToPosition(
+                            0,
+                            250,
+                            true
+                          );
+                        }, 300);
+                      }}
                     />
                   </View>
 
@@ -671,6 +771,15 @@ const UpdatePerson = () => {
                       multiline
                       numberOfLines={5}
                       style={{ fontFamily: 'outfit-regular' }}
+                      onFocus={() => {
+                        setTimeout(() => {
+                          (scrollViewRef.current as any)?.scrollToPosition(
+                            0,
+                            250,
+                            true
+                          );
+                        }, 300);
+                      }}
                     />
                   </View>
 
@@ -690,6 +799,15 @@ const UpdatePerson = () => {
                       multiline
                       numberOfLines={5}
                       style={{ fontFamily: 'outfit-regular' }}
+                      onFocus={() => {
+                        setTimeout(() => {
+                          (scrollViewRef.current as any)?.scrollToPosition(
+                            0,
+                            250,
+                            true
+                          );
+                        }, 300);
+                      }}
                     />
                   </View>
 
@@ -733,11 +851,6 @@ const UpdatePerson = () => {
                 </View>
               </View>
             )}
-            keyboardShouldPersistTaps='handled'
-            contentContainerStyle={{
-              borderRadius: 24,
-            }}
-            nestedScrollEnabled
           />
 
           {/* Go back button */}

@@ -14,13 +14,12 @@ import {
   Keyboard,
   Platform,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import GoBackBtn from '@/components/GoBackBtn';
 import { router, useNavigation } from 'expo-router';
 import Logo from '@/components/Logo';
 import { images } from '@/constants/images';
 import * as ImagePicker from 'expo-image-picker';
-import RNPickerSelect from 'react-native-picker-select';
 import { collection, doc, getDocs, query, setDoc } from 'firebase/firestore';
 import { db, storage } from '@/configs/FirebaseConfig';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
@@ -245,6 +244,8 @@ const AddPerson = () => {
     console.log('Toggled to:', !isAdmin);
   };
 
+  const scrollViewRef = useRef<any>(null);
+
   if (loading) {
     return (
       <View className='flex-1 justify-center items-center'>
@@ -291,6 +292,15 @@ const AddPerson = () => {
             data={[{}]} // dummy single item to render the full form
             keyExtractor={() => 'form'}
             enableAutomaticScroll={true}
+            contentContainerStyle={{
+              flexGrow: 1,
+              borderRadius: 24,
+              paddingBottom: 150, // VERY IMPORTANT
+            }}
+            keyboardShouldPersistTaps='handled'
+            enableOnAndroid
+            extraScrollHeight={0}
+            nestedScrollEnabled
             renderItem={() => (
               <View className='mb-24 bg-dataHolder rounded-3xl'>
                 {/* Information (details) about a person */}
@@ -328,6 +338,15 @@ const AddPerson = () => {
                       placeholder='name'
                       placeholderTextColor='#42424290'
                       style={{ fontFamily: 'outfit-regular' }}
+                      onFocus={() => {
+                        setTimeout(() => {
+                          (scrollViewRef.current as any)?.scrollToPosition(
+                            0,
+                            250,
+                            true
+                          );
+                        }, 300);
+                      }}
                     />
                   </View>
                   <View className='flex flex-row items-center w-[90%] justify-between'>
@@ -345,6 +364,15 @@ const AddPerson = () => {
                       placeholder='code'
                       placeholderTextColor='#42424290'
                       style={{ fontFamily: 'outfit-regular' }}
+                      onFocus={() => {
+                        setTimeout(() => {
+                          (scrollViewRef.current as any)?.scrollToPosition(
+                            0,
+                            250,
+                            true
+                          );
+                        }, 300);
+                      }}
                     />
                   </View>
                   <View className='flex flex-row items-center w-[90%] justify-between'>
@@ -361,6 +389,15 @@ const AddPerson = () => {
                       placeholder='title'
                       placeholderTextColor='#42424290'
                       style={{ fontFamily: 'outfit-regular' }}
+                      onFocus={() => {
+                        setTimeout(() => {
+                          (scrollViewRef.current as any)?.scrollToPosition(
+                            0,
+                            250,
+                            true
+                          );
+                        }, 300);
+                      }}
                     />
                   </View>
 
@@ -465,6 +502,15 @@ const AddPerson = () => {
                       placeholder='report to'
                       placeholderTextColor='#42424290'
                       style={{ fontFamily: 'outfit-regular' }}
+                      onFocus={() => {
+                        setTimeout(() => {
+                          (scrollViewRef.current as any)?.scrollToPosition(
+                            0,
+                            250,
+                            true
+                          );
+                        }, 300);
+                      }}
                     />
                   </View>
                   <View className='flex flex-row items-center w-[90%] justify-between'>
@@ -482,6 +528,15 @@ const AddPerson = () => {
                       placeholder='arrangement'
                       placeholderTextColor='#42424290'
                       style={{ fontFamily: 'outfit-regular' }}
+                      onFocus={() => {
+                        setTimeout(() => {
+                          (scrollViewRef.current as any)?.scrollToPosition(
+                            0,
+                            250,
+                            true
+                          );
+                        }, 300);
+                      }}
                     />
                   </View>
                   <View className='flex flex-row items-center w-[90%] justify-between'>
@@ -498,6 +553,15 @@ const AddPerson = () => {
                       placeholder='mobile'
                       placeholderTextColor='#42424290'
                       style={{ fontFamily: 'outfit-regular' }}
+                      onFocus={() => {
+                        setTimeout(() => {
+                          (scrollViewRef.current as any)?.scrollToPosition(
+                            0,
+                            250,
+                            true
+                          );
+                        }, 300);
+                      }}
                     />
                   </View>
                   <View className='flex flex-row items-center w-[90%] justify-between'>
@@ -514,6 +578,15 @@ const AddPerson = () => {
                       placeholder='emergency contact'
                       placeholderTextColor='#42424290'
                       style={{ fontFamily: 'outfit-regular' }}
+                      onFocus={() => {
+                        setTimeout(() => {
+                          (scrollViewRef.current as any)?.scrollToPosition(
+                            0,
+                            250,
+                            true
+                          );
+                        }, 300);
+                      }}
                     />
                   </View>
                   <View className='flex flex-row items-center w-[90%] justify-between'>
@@ -531,6 +604,15 @@ const AddPerson = () => {
                       placeholder='ex: name.name@frg-eg.com'
                       placeholderTextColor='#42424290'
                       style={{ fontFamily: 'outfit-regular' }}
+                      onFocus={() => {
+                        setTimeout(() => {
+                          (scrollViewRef.current as any)?.scrollToPosition(
+                            0,
+                            250,
+                            true
+                          );
+                        }, 300);
+                      }}
                     />
                   </View>
                   <View className='flex flex-row items-center w-[90%] justify-between'>
@@ -548,6 +630,15 @@ const AddPerson = () => {
                       placeholder='ex: nasr city'
                       placeholderTextColor='#42424290'
                       style={{ fontFamily: 'outfit-regular' }}
+                      onFocus={() => {
+                        setTimeout(() => {
+                          (scrollViewRef.current as any)?.scrollToPosition(
+                            0,
+                            250,
+                            true
+                          );
+                        }, 300);
+                      }}
                     />
                   </View>
                   <View className='flex flex-row items-center w-[90%] justify-between'>
@@ -564,6 +655,15 @@ const AddPerson = () => {
                       placeholder='ex: 01-01-2001'
                       placeholderTextColor='#42424290'
                       style={{ fontFamily: 'outfit-regular' }}
+                      onFocus={() => {
+                        setTimeout(() => {
+                          (scrollViewRef.current as any)?.scrollToPosition(
+                            0,
+                            250,
+                            true
+                          );
+                        }, 300);
+                      }}
                     />
                   </View>
                   <View className='flex flex-row items-center w-[90%] justify-between'>
@@ -580,6 +680,15 @@ const AddPerson = () => {
                       placeholder='ex: 01-01-2001'
                       placeholderTextColor='#42424290'
                       style={{ fontFamily: 'outfit-regular' }}
+                      onFocus={() => {
+                        setTimeout(() => {
+                          (scrollViewRef.current as any)?.scrollToPosition(
+                            0,
+                            250,
+                            true
+                          );
+                        }, 300);
+                      }}
                     />
                   </View>
                   <View className='flex flex-row items-center w-[90%] justify-between'>
@@ -598,6 +707,15 @@ const AddPerson = () => {
                       multiline
                       numberOfLines={5}
                       style={{ fontFamily: 'outfit-regular' }}
+                      onFocus={() => {
+                        setTimeout(() => {
+                          (scrollViewRef.current as any)?.scrollToPosition(
+                            0,
+                            250,
+                            true
+                          );
+                        }, 300);
+                      }}
                     />
                   </View>
                   <View className='flex flex-row items-center w-[90%] justify-between'>
@@ -616,6 +734,15 @@ const AddPerson = () => {
                       multiline
                       numberOfLines={5}
                       style={{ fontFamily: 'outfit-regular' }}
+                      onFocus={() => {
+                        setTimeout(() => {
+                          (scrollViewRef.current as any)?.scrollToPosition(
+                            0,
+                            250,
+                            true
+                          );
+                        }, 300);
+                      }}
                     />
                   </View>
 
@@ -664,11 +791,6 @@ const AddPerson = () => {
                 </View>
               </View>
             )}
-            keyboardShouldPersistTaps='handled'
-            contentContainerStyle={{
-              borderRadius: 24,
-            }}
-            nestedScrollEnabled
           />
 
           {/* Go back button */}

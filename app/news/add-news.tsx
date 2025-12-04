@@ -13,7 +13,8 @@ import {
   Keyboard,
   Platform,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import React, { useEffect, useRef, useState } from 'react';
 import GoBackBtn from '@/components/GoBackBtn';
 import { router, useNavigation } from 'expo-router';
 import Logo from '@/components/Logo';
@@ -188,6 +189,8 @@ const AddNews = () => {
     console.log('Toggled to:', !commentable);
   };
 
+  const scrollViewRef = useRef<any>(null);
+
   if (!index || loading) {
     return (
       <View className='flex-1 justify-center items-center'>
@@ -233,14 +236,24 @@ const AddNews = () => {
           <KeyboardAvoidingView
             style={{ flex: 1 }}
             behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-            keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0}
           >
             <TouchableWithoutFeedback
               onPress={Keyboard.dismiss}
               accessible={false}
             >
               {/* Information (details) about a news */}
-              <ScrollView className='mb-24 bg-dataHolder rounded-3xl'>
+              <KeyboardAwareScrollView
+                ref={scrollViewRef}
+                className='mb-24 bg-dataHolder rounded-3xl'
+                contentContainerStyle={{
+                  flexGrow: 1,
+                  paddingBottom: 150, // VERY IMPORTANT
+                }}
+                keyboardShouldPersistTaps='handled'
+                enableAutomaticScroll={true}
+                enableOnAndroid
+                extraScrollHeight={0}
+              >
                 <View className='flex items-center'>
                   <TouchableOpacity
                     className='w-[96%] h-80 m-5 items-center bg-black rounded-2xl'
@@ -259,7 +272,6 @@ const AddNews = () => {
                     Press on the image to replace it
                   </Text>
                 </View>
-
                 <View className='gap-2 mt-3 flex items-center'>
                   <View className='flex flex-row items-center w-[90%] justify-between'>
                     <Text
@@ -275,6 +287,15 @@ const AddNews = () => {
                       placeholder='title'
                       placeholderTextColor='#1234'
                       style={{ fontFamily: 'outfit-regular' }}
+                      onFocus={() => {
+                        setTimeout(() => {
+                          (scrollViewRef.current as any)?.scrollToPosition(
+                            0,
+                            250,
+                            true
+                          );
+                        }, 300);
+                      }}
                     />
                   </View>
 
@@ -308,6 +329,15 @@ const AddNews = () => {
                       placeholder='news head'
                       placeholderTextColor='#1234'
                       style={{ fontFamily: 'outfit-regular' }}
+                      onFocus={() => {
+                        setTimeout(() => {
+                          (scrollViewRef.current as any)?.scrollToPosition(
+                            0,
+                            250,
+                            true
+                          );
+                        }, 300);
+                      }}
                     />
                   </View>
 
@@ -337,6 +367,15 @@ const AddNews = () => {
                             ? 'right'
                             : 'left',
                       }}
+                      onFocus={() => {
+                        setTimeout(() => {
+                          (scrollViewRef.current as any)?.scrollToPosition(
+                            0,
+                            250,
+                            true
+                          );
+                        }, 300);
+                      }}
                     />
                   </View>
 
@@ -363,7 +402,6 @@ const AddNews = () => {
                     </Text>
                   </TouchableOpacity>
                 </View>
-
                 <View className='my-5 flex items-center'>
                   <TouchableOpacity
                     disabled={loading}
@@ -387,7 +425,7 @@ const AddNews = () => {
                     )}
                   </TouchableOpacity>
                 </View>
-              </ScrollView>
+              </KeyboardAwareScrollView>
             </TouchableWithoutFeedback>
           </KeyboardAvoidingView>
 

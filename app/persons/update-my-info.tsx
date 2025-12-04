@@ -13,7 +13,7 @@ import {
   Keyboard,
   Platform,
 } from 'react-native';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { db, storage } from '@/configs/FirebaseConfig';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { router, useLocalSearchParams, useNavigation } from 'expo-router';
@@ -218,6 +218,8 @@ const UpdateMyInfo = () => {
     router.back();
   };
 
+  const scrollViewRef = useRef<any>(null);
+
   if (!code || loading || !personData) {
     return (
       <View className='flex-1 justify-center items-center'>
@@ -264,10 +266,16 @@ const UpdateMyInfo = () => {
           {/* <ScrollView className='mb-24 bg-darkest rounded-3xl'> */}
           {/* <SafeAreaView style={{ flex: 1 }}> */}
           <KeyboardAwareScrollView
+            ref={scrollViewRef}
             className='mb-24 bg-dataHolder rounded-3xl'
-            contentContainerStyle={{ flexGrow: 1 }}
+            contentContainerStyle={{
+              flexGrow: 1,
+              paddingBottom: 150, // VERY IMPORTANT
+            }}
             keyboardShouldPersistTaps='handled'
             enableAutomaticScroll={true}
+            enableOnAndroid
+            extraScrollHeight={0}
           >
             {/* Image */}
             <View className='flex items-center'>
@@ -304,6 +312,15 @@ const UpdateMyInfo = () => {
                   value={name}
                   onChangeText={setName}
                   style={{ fontFamily: 'outfit-regular' }}
+                  onFocus={() => {
+                    setTimeout(() => {
+                      (scrollViewRef.current as any)?.scrollToPosition(
+                        0,
+                        250,
+                        true
+                      );
+                    }, 300);
+                  }}
                 />
               </View>
 
@@ -321,6 +338,15 @@ const UpdateMyInfo = () => {
                   placeholder={personData?.contact || 'mobile'}
                   placeholderTextColor='#42424290'
                   style={{ fontFamily: 'outfit-regular' }}
+                  onFocus={() => {
+                    setTimeout(() => {
+                      (scrollViewRef.current as any)?.scrollToPosition(
+                        0,
+                        250,
+                        true
+                      );
+                    }, 300);
+                  }}
                 />
               </View>
 
@@ -338,6 +364,15 @@ const UpdateMyInfo = () => {
                   placeholder={personData?.emergency || 'emergency contact'}
                   placeholderTextColor='#42424290'
                   style={{ fontFamily: 'outfit-regular' }}
+                  onFocus={() => {
+                    setTimeout(() => {
+                      (scrollViewRef.current as any)?.scrollToPosition(
+                        0,
+                        250,
+                        true
+                      );
+                    }, 300);
+                  }}
                 />
               </View>
 
@@ -356,6 +391,15 @@ const UpdateMyInfo = () => {
                   placeholder={personData?.address || 'ex: nasr city'}
                   placeholderTextColor='#42424290'
                   style={{ fontFamily: 'outfit-regular' }}
+                  onFocus={() => {
+                    setTimeout(() => {
+                      (scrollViewRef.current as any)?.scrollToPosition(
+                        0,
+                        250,
+                        true
+                      );
+                    }, 300);
+                  }}
                 />
               </View>
 
@@ -373,6 +417,15 @@ const UpdateMyInfo = () => {
                   placeholder={personData?.dateOfBirth || 'ex: 01-01-2001'}
                   placeholderTextColor='#42424290'
                   style={{ fontFamily: 'outfit-regular' }}
+                  onFocus={() => {
+                    setTimeout(() => {
+                      (scrollViewRef.current as any)?.scrollToPosition(
+                        0,
+                        250,
+                        true
+                      );
+                    }, 300);
+                  }}
                 />
               </View>
 
@@ -392,6 +445,15 @@ const UpdateMyInfo = () => {
                   multiline
                   numberOfLines={5}
                   style={{ fontFamily: 'outfit-regular' }}
+                  onFocus={() => {
+                    setTimeout(() => {
+                      (scrollViewRef.current as any)?.scrollToPosition(
+                        0,
+                        250,
+                        true
+                      );
+                    }, 300);
+                  }}
                 />
               </View>
 
@@ -411,6 +473,15 @@ const UpdateMyInfo = () => {
                   multiline
                   numberOfLines={5}
                   style={{ fontFamily: 'outfit-regular' }}
+                  onFocus={() => {
+                    setTimeout(() => {
+                      (scrollViewRef.current as any)?.scrollToPosition(
+                        0,
+                        250,
+                        true
+                      );
+                    }, 300);
+                  }}
                 />
               </View>
             </View>

@@ -13,7 +13,7 @@ import {
   Keyboard,
   Platform,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { db, storage } from '@/configs/FirebaseConfig';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -205,12 +205,14 @@ const UpdateLeaderInfo = () => {
     router.back();
   };
 
+  const scrollViewRef = useRef<any>(null);
+
   if (!code || loading || !personData) {
     return (
       <View className='flex-1 justify-center items-center'>
         <ActivityIndicator
           size='large'
-          color='#00eeff'
+          color='#F8CA37'
         />
       </View>
     );
@@ -251,10 +253,16 @@ const UpdateLeaderInfo = () => {
           {/* <ScrollView className='mb-24 bg-news rounded-3xl'> */}
           <SafeAreaView style={{ flex: 1 }}>
             <KeyboardAwareScrollView
+              ref={scrollViewRef}
               className='mb-24 bg-backBtn rounded-3xl'
-              contentContainerStyle={{ flexGrow: 1 }}
+              contentContainerStyle={{
+                flexGrow: 1,
+                paddingBottom: 150,
+              }}
               keyboardShouldPersistTaps='handled'
               enableAutomaticScroll={true}
+              enableOnAndroid
+              extraScrollHeight={0}
             >
               {/* Image */}
               <View className='flex items-center'>
@@ -290,6 +298,15 @@ const UpdateLeaderInfo = () => {
                     value={name}
                     onChangeText={setName}
                     style={{ fontFamily: 'outfit-regular' }}
+                    onFocus={() => {
+                      setTimeout(() => {
+                        (scrollViewRef.current as any)?.scrollToPosition(
+                          0,
+                          250,
+                          true
+                        );
+                      }, 300);
+                    }}
                   />
                 </View>
 
@@ -306,6 +323,15 @@ const UpdateLeaderInfo = () => {
                     value={title}
                     placeholder={personData?.title || 'Leader title'}
                     style={{ fontFamily: 'outfit-regular' }}
+                    onFocus={() => {
+                      setTimeout(() => {
+                        (scrollViewRef.current as any)?.scrollToPosition(
+                          0,
+                          250,
+                          true
+                        );
+                      }, 300);
+                    }}
                   />
                 </View>
 
@@ -324,6 +350,15 @@ const UpdateLeaderInfo = () => {
                     multiline
                     numberOfLines={5}
                     style={{ fontFamily: 'outfit-regular' }}
+                    onFocus={() => {
+                      setTimeout(() => {
+                        (scrollViewRef.current as any)?.scrollToPosition(
+                          0,
+                          250,
+                          true
+                        );
+                      }, 300);
+                    }}
                   />
                 </View>
               </View>
