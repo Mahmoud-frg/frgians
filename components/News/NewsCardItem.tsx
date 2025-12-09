@@ -45,7 +45,7 @@ const NewsCardItem = ({
             {news?.title}
           </Text>
           <Text
-            className='text-sm text-center color-coTitle'
+            className='text-sm text-center color-date'
             style={{ fontFamily: 'outfit-regular' }}
             numberOfLines={2}
             ellipsizeMode='tail'

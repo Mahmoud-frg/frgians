@@ -266,6 +266,7 @@ const UpdateMyInfo = () => {
           {/* <ScrollView className='mb-24 bg-darkest rounded-3xl'> */}
           {/* <SafeAreaView style={{ flex: 1 }}> */}
           <KeyboardAwareScrollView
+            style={{ flex: 1 }}
             ref={scrollViewRef}
             className='mb-24 bg-dataHolder rounded-3xl'
             contentContainerStyle={{
@@ -316,7 +317,7 @@ const UpdateMyInfo = () => {
                     setTimeout(() => {
                       (scrollViewRef.current as any)?.scrollToPosition(
                         0,
-                        250,
+                        150,
                         true
                       );
                     }, 300);
@@ -342,7 +343,7 @@ const UpdateMyInfo = () => {
                     setTimeout(() => {
                       (scrollViewRef.current as any)?.scrollToPosition(
                         0,
-                        250,
+                        150,
                         true
                       );
                     }, 300);
@@ -368,7 +369,7 @@ const UpdateMyInfo = () => {
                     setTimeout(() => {
                       (scrollViewRef.current as any)?.scrollToPosition(
                         0,
-                        250,
+                        150,
                         true
                       );
                     }, 300);
@@ -395,7 +396,7 @@ const UpdateMyInfo = () => {
                     setTimeout(() => {
                       (scrollViewRef.current as any)?.scrollToPosition(
                         0,
-                        250,
+                        200,
                         true
                       );
                     }, 300);
@@ -449,7 +450,7 @@ const UpdateMyInfo = () => {
                     setTimeout(() => {
                       (scrollViewRef.current as any)?.scrollToPosition(
                         0,
-                        250,
+                        300,
                         true
                       );
                     }, 300);
@@ -477,7 +478,7 @@ const UpdateMyInfo = () => {
                     setTimeout(() => {
                       (scrollViewRef.current as any)?.scrollToPosition(
                         0,
-                        250,
+                        350,
                         true
                       );
                     }, 300);

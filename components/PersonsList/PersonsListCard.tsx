@@ -58,7 +58,7 @@ const PersonsListCard = ({ person }: PersonsListCardProps) => {
             {person?.title}
           </Text>
           <Text
-            className='text-l color-[#F05727]'
+            className='text-l color-date'
             style={{ fontFamily: 'outfit-medium' }}
           >
             Joined @ {person?.joinDate}

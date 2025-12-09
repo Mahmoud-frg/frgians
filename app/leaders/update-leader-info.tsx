@@ -253,6 +253,7 @@ const UpdateLeaderInfo = () => {
           {/* <ScrollView className='mb-24 bg-news rounded-3xl'> */}
           <SafeAreaView style={{ flex: 1 }}>
             <KeyboardAwareScrollView
+              style={{ flex: 1 }}
               ref={scrollViewRef}
               className='mb-24 bg-backBtn rounded-3xl'
               contentContainerStyle={{
@@ -302,7 +303,7 @@ const UpdateLeaderInfo = () => {
                       setTimeout(() => {
                         (scrollViewRef.current as any)?.scrollToPosition(
                           0,
-                          250,
+                          150,
                           true
                         );
                       }, 300);
@@ -327,7 +328,7 @@ const UpdateLeaderInfo = () => {
                       setTimeout(() => {
                         (scrollViewRef.current as any)?.scrollToPosition(
                           0,
-                          250,
+                          150,
                           true
                         );
                       }, 300);

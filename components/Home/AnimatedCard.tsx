@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     width: 5,
     height: 5,
     position: 'absolute',
-    backgroundColor: '#F05727',
+    backgroundColor: '#541212',
     borderRadius: 100,
     shadowColor: Colors.icons,
     shadowOpacity: 1,

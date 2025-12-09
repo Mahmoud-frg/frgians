@@ -195,7 +195,7 @@ const NewsList = () => {
                   className='absolute top-2 right-2 self-end w-16 h-16 rotate-180 overflow-hidden'
                 />
                 <Text
-                  className='text-3xl text-iconBG'
+                  className='text-3xl text-iconBG w-[90%]'
                   style={{ fontFamily: 'outfit-extra-bold' }}
                 >
                   {news[currentIndex]?.title}
@@ -220,7 +220,7 @@ const NewsList = () => {
 
               <View className='w-[90%] justify-center mx-5 my-2'>
                 <Text
-                  className='text-lg text-[#F05727]'
+                  className='text-lg text-date'
                   style={{ fontFamily: 'outfit-regular' }}
                 >
                   {news[currentIndex]?.date}

@@ -87,7 +87,9 @@ const NewsDetails = () => {
 
   useEffect(() => {
     const showSub = Keyboard.addListener('keyboardDidShow', (e) => {
-      setKeyboardHeight(e.endCoordinates.height + 15); // extra margin
+      Platform.OS === 'ios'
+        ? setKeyboardHeight(60)
+        : setKeyboardHeight(e.endCoordinates.height + 15);
     });
     const hideSub = Keyboard.addListener('keyboardDidHide', () => {
       setKeyboardHeight(60);
@@ -534,7 +536,7 @@ const NewsDetails = () => {
                               : { uri: newsDetails?.imgUrl }
                           }
                           className='rounded-3xl object-cover h-full w-full shadow-md self-center border-4 border-[#183F4E]'
-                          resizeMode='cover'
+                          resizeMode='contain'
                         />
                       </View>
                     </View>
@@ -551,14 +553,26 @@ const NewsDetails = () => {
                         <View className='w-96 h-0.5 bg-darkest self-center rounded-3xl opacity-25' />
 
                         <Text
-                          className='text-[#F05929] text-2xl text-left mt-5'
-                          style={{ fontFamily: 'outfit-bold' }}
+                          className='text-date text-2xl text-left mt-5'
+                          style={{
+                            fontFamily: 'outfit-bold',
+                            writingDirection:
+                              newsDetails?.body &&
+                              /^[\u0600-\u06FF]/.test(newsDetails?.body.trim())
+                                ? 'rtl'
+                                : 'ltr',
+                            textAlign:
+                              newsDetails?.body &&
+                              /^[\u0600-\u06FF]/.test(newsDetails?.body.trim())
+                                ? 'right'
+                                : 'left',
+                          }}
                         >
                           {newsDetails?.head}
                         </Text>
 
                         <Text
-                          className='text-left text-coSecondary'
+                          className='text-left text-notification'
                           style={{ fontFamily: 'outfit-bold' }}
                         >
                           {newsDetails?.date}
@@ -665,7 +679,7 @@ const NewsDetails = () => {
                             <Ionicons
                               name='trash'
                               size={30}
-                              color='red'
+                              color='#CD1818'
                             />
                             <Text
                               className='text-lg ml-2 text-white'

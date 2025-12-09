@@ -68,7 +68,7 @@ const SliderPersons = () => {
             horizontal
             showsHorizontalScrollIndicator={false}
             ItemSeparatorComponent={() => <View className='w-auto' />}
-            onRefresh={GetSliderList}
+            // onRefresh={GetSliderList}
             refreshing={loading}
           />
         </View>

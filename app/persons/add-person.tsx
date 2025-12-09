@@ -290,6 +290,8 @@ const AddPerson = () => {
 
           <KeyboardAwareFlatList
             data={[{}]} // dummy single item to render the full form
+            style={{ flex: 1 }}
+            ref={scrollViewRef}
             keyExtractor={() => 'form'}
             enableAutomaticScroll={true}
             contentContainerStyle={{
@@ -342,7 +344,7 @@ const AddPerson = () => {
                         setTimeout(() => {
                           (scrollViewRef.current as any)?.scrollToPosition(
                             0,
-                            250,
+                            150,
                             true
                           );
                         }, 300);
@@ -368,7 +370,7 @@ const AddPerson = () => {
                         setTimeout(() => {
                           (scrollViewRef.current as any)?.scrollToPosition(
                             0,
-                            250,
+                            150,
                             true
                           );
                         }, 300);
@@ -393,7 +395,7 @@ const AddPerson = () => {
                         setTimeout(() => {
                           (scrollViewRef.current as any)?.scrollToPosition(
                             0,
-                            250,
+                            150,
                             true
                           );
                         }, 300);
@@ -506,7 +508,7 @@ const AddPerson = () => {
                         setTimeout(() => {
                           (scrollViewRef.current as any)?.scrollToPosition(
                             0,
-                            250,
+                            200,
                             true
                           );
                         }, 300);
@@ -557,7 +559,7 @@ const AddPerson = () => {
                         setTimeout(() => {
                           (scrollViewRef.current as any)?.scrollToPosition(
                             0,
-                            250,
+                            300,
                             true
                           );
                         }, 300);
@@ -582,7 +584,7 @@ const AddPerson = () => {
                         setTimeout(() => {
                           (scrollViewRef.current as any)?.scrollToPosition(
                             0,
-                            250,
+                            350,
                             true
                           );
                         }, 300);
@@ -608,7 +610,7 @@ const AddPerson = () => {
                         setTimeout(() => {
                           (scrollViewRef.current as any)?.scrollToPosition(
                             0,
-                            250,
+                            400,
                             true
                           );
                         }, 300);
@@ -634,7 +636,7 @@ const AddPerson = () => {
                         setTimeout(() => {
                           (scrollViewRef.current as any)?.scrollToPosition(
                             0,
-                            250,
+                            450,
                             true
                           );
                         }, 300);
@@ -659,7 +661,7 @@ const AddPerson = () => {
                         setTimeout(() => {
                           (scrollViewRef.current as any)?.scrollToPosition(
                             0,
-                            250,
+                            500,
                             true
                           );
                         }, 300);
@@ -684,7 +686,7 @@ const AddPerson = () => {
                         setTimeout(() => {
                           (scrollViewRef.current as any)?.scrollToPosition(
                             0,
-                            250,
+                            550,
                             true
                           );
                         }, 300);
@@ -711,7 +713,7 @@ const AddPerson = () => {
                         setTimeout(() => {
                           (scrollViewRef.current as any)?.scrollToPosition(
                             0,
-                            250,
+                            650,
                             true
                           );
                         }, 300);
@@ -738,7 +740,7 @@ const AddPerson = () => {
                         setTimeout(() => {
                           (scrollViewRef.current as any)?.scrollToPosition(
                             0,
-                            250,
+                            750,
                             true
                           );
                         }, 300);

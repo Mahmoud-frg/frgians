@@ -29,6 +29,7 @@ module.exports = {
         leaderTitle: '#A6AEBF',
         seeAll: '#D6DEDE',
         catPersons: '#E7E8EA',
+        date: '#541212',
 
         light: {
           100: '#FFFAE6',

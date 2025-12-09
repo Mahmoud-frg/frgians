@@ -291,7 +291,7 @@ const AddNews = () => {
                         setTimeout(() => {
                           (scrollViewRef.current as any)?.scrollToPosition(
                             0,
-                            250,
+                            150,
                             true
                           );
                         }, 300);
@@ -333,7 +333,7 @@ const AddNews = () => {
                         setTimeout(() => {
                           (scrollViewRef.current as any)?.scrollToPosition(
                             0,
-                            250,
+                            150,
                             true
                           );
                         }, 300);
@@ -371,7 +371,7 @@ const AddNews = () => {
                         setTimeout(() => {
                           (scrollViewRef.current as any)?.scrollToPosition(
                             0,
-                            250,
+                            300,
                             true
                           );
                         }, 300);
