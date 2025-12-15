@@ -6,6 +6,7 @@ import {
 } from 'react-native';
 import * as React from 'react';
 import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useSignUp } from '@clerk/clerk-expo';
 import { Link, useRouter } from 'expo-router';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -108,6 +109,8 @@ export default function SignUpScreen() {
     }
   };
 
+  const scrollViewRef = React.useRef<any>(null);
+
   if (pendingVerification) {
     return (
       <KeyboardAvoidingView
@@ -129,57 +132,80 @@ export default function SignUpScreen() {
               start={{ x: 0, y: 1 }} // bottom left
               end={{ x: 1, y: 0 }} // top right
               style={{ flex: 1, justifyContent: 'center', padding: 40 }}
+              className='py-48'
             >
-              <View className='mx-auto bg-search rounded-2xl shadow-2xl p-10'>
-                <Spinner visible={loading} />
+              <KeyboardAwareScrollView
+                ref={scrollViewRef}
+                className='bg-dataHolder w-96 rounded-3xl'
+                contentContainerStyle={{
+                  flexGrow: 1,
+                  paddingBottom: 150, // VERY IMPORTANT
+                }}
+                keyboardShouldPersistTaps='handled'
+                enableAutomaticScroll={true}
+                enableOnAndroid
+                extraScrollHeight={0}
+              >
+                <View className='w-96 py-16 mx-auto bg-search rounded-2xl shadow-2xl'>
+                  <Spinner visible={loading} />
 
-                <View className='mx-auto'>
-                  <Text
-                    className='mx-auto text-3xl color-coTitle'
-                    style={{ fontFamily: 'outfit-bold' }}
-                  >
-                    Verify your email
-                  </Text>
-                  <Image
-                    source={images.FRGians}
-                    className='w-14 h-14 mt-10 mx-auto'
-                    tintColor='#000000'
-                  />
-                  <Text
-                    className='mx-auto text-coTitle'
-                    style={{ fontFamily: 'outfit-bold' }}
-                  >
-                    FRGians
-                  </Text>
-                </View>
-
-                <View className='p-10'>
-                  <View className='gap-2'>
-                    <TextInput
-                      className='w-full px-4 py-3 rounded-lg bg-secondary color-darkest border border-dataHolder'
+                  <View className='mx-auto'>
+                    <Text
+                      className='mx-auto text-3xl color-coTitle'
                       style={{ fontFamily: 'outfit-bold' }}
-                      value={code}
-                      placeholder='Enter your verification code'
-                      placeholderTextColor='#1234'
-                      onChangeText={(code) => setCode(code)}
+                    >
+                      Verify your email
+                    </Text>
+                    <Image
+                      source={images.FRGians}
+                      className='w-14 h-14 mt-10 mx-auto'
+                      tintColor='#000000'
                     />
+                    <Text
+                      className='mx-auto text-coTitle'
+                      style={{ fontFamily: 'outfit-bold' }}
+                    >
+                      FRGians
+                    </Text>
                   </View>
 
-                  <View className='p-7'>
-                    <TouchableOpacity
-                      onPress={onVerifyPress}
-                      className='w-full px-4 py-3 rounded-lg bg-coSecondary'
-                    >
-                      <Text
-                        className='mx-auto text-xl text-darkest'
+                  <View className='p-10'>
+                    <View className='gap-2'>
+                      <TextInput
+                        className='w-full px-4 py-3 rounded-lg bg-secondary color-darkest border border-dataHolder'
                         style={{ fontFamily: 'outfit-bold' }}
+                        value={code}
+                        placeholder='Enter your verification code'
+                        placeholderTextColor='#1234'
+                        onChangeText={(code) => setCode(code)}
+                        onFocus={() => {
+                          setTimeout(() => {
+                            (scrollViewRef.current as any)?.scrollToPosition(
+                              0,
+                              100,
+                              true
+                            );
+                          }, 300);
+                        }}
+                      />
+                    </View>
+
+                    <View className='p-7'>
+                      <TouchableOpacity
+                        onPress={onVerifyPress}
+                        className='w-full px-4 py-3 rounded-lg bg-coSecondary'
                       >
-                        Verify
-                      </Text>
-                    </TouchableOpacity>
+                        <Text
+                          className='mx-auto text-xl text-darkest'
+                          style={{ fontFamily: 'outfit-bold' }}
+                        >
+                          Verify
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
                   </View>
                 </View>
-              </View>
+              </KeyboardAwareScrollView>
             </LinearGradient>
           </View>
         </TouchableWithoutFeedback>
@@ -206,116 +232,174 @@ export default function SignUpScreen() {
             locations={[0, 0.25, 0.5, 0.75, 1]} // smooth transitions
             start={{ x: 0, y: 1 }} // bottom left
             end={{ x: 1, y: 0 }} // top right
-            style={{ flex: 1, justifyContent: 'center', padding: 40 }}
+            style={{ flex: 1, justifyContent: 'center', padding: 30 }}
           >
-            <View className='w-96 mx-auto bg-search rounded-2xl shadow-2xl p-10'>
-              <Spinner visible={loading} />
+            <KeyboardAwareScrollView
+              ref={scrollViewRef}
+              className='mb-24 bg-dataHolder rounded-3xl py-10'
+              contentContainerStyle={{
+                flexGrow: 1,
+                paddingBottom: 150, // VERY IMPORTANT
+              }}
+              keyboardShouldPersistTaps='handled'
+              enableAutomaticScroll={true}
+              enableOnAndroid
+              extraScrollHeight={0}
+            >
+              <View className='w-96 mx-auto bg-search rounded-2xl shadow-2xl p-10'>
+                <Spinner visible={loading} />
 
-              <View className='mx-auto mb-5'>
-                <Text
-                  className='mx-auto text-3xl color-coTitle'
-                  style={{ fontFamily: 'outfit-bold' }}
-                >
-                  Sign up
-                </Text>
-                <Image
-                  source={images.FRGians}
-                  className='w-14 h-14 mt-10 mx-auto'
-                  tintColor='#000000'
-                />
-                <Text
-                  className='mx-auto text-coTitle'
-                  style={{ fontFamily: 'outfit-bold' }}
-                >
-                  FRGians
-                </Text>
-                <Text
-                  className='mx-auto mt-5 text-xl color-title'
-                  style={{ fontFamily: 'outfit-bold' }}
-                >
-                  Join our FRG application
-                </Text>
-              </View>
-
-              <View className='gap-2'>
-                <TextInput
-                  className='w-full px-4 py-3 rounded-lg bg-secondary color-darkest border border-dataHolder'
-                  style={{ fontFamily: 'outfit-bold' }}
-                  value={firstName}
-                  placeholder='first name'
-                  placeholderTextColor='#1234'
-                  onChangeText={(firstName) => setFirstName(firstName)}
-                />
-                <TextInput
-                  className='w-full px-4 py-3 rounded-lg bg-secondary color-darkest border border-dataHolder'
-                  style={{ fontFamily: 'outfit-bold' }}
-                  value={lastName}
-                  placeholder='last name'
-                  placeholderTextColor='#1234'
-                  onChangeText={(lastName) => setLastName(lastName)}
-                />
-                <TextInput
-                  className='w-full px-4 py-3 rounded-lg bg-secondary color-darkest border border-dataHolder'
-                  style={{ fontFamily: 'outfit-bold' }}
-                  value={username}
-                  placeholder='user name'
-                  placeholderTextColor='#1234'
-                  onChangeText={(username) => setUsername(username)}
-                />
-                <TextInput
-                  className='w-full px-4 py-3 rounded-lg bg-secondary color-darkest border border-dataHolder'
-                  style={{ fontFamily: 'outfit-bold' }}
-                  autoCapitalize='none'
-                  value={emailAddress}
-                  placeholder='email : name.name@frg-eg.com'
-                  placeholderTextColor='#1234'
-                  onChangeText={(email) => setEmailAddress(email)}
-                />
-                <TextInput
-                  className='w-full px-4 py-3 rounded-lg bg-secondary color-darkest border border-dataHolder'
-                  style={{ fontFamily: 'outfit-bold' }}
-                  value={password}
-                  placeholder='password'
-                  placeholderTextColor='#1234'
-                  secureTextEntry={true}
-                  onChangeText={(password) => setPassword(password)}
-                />
-              </View>
-
-              <View className='p-7'>
-                <TouchableOpacity
-                  onPress={onSignUpPress}
-                  className='w-full px-4 py-3 rounded-lg bg-coSecondary'
-                >
+                <View className='mx-auto mb-5'>
                   <Text
-                    className='mx-auto text-xl text-darkest'
+                    className='mx-auto text-3xl color-coTitle'
                     style={{ fontFamily: 'outfit-bold' }}
                   >
-                    Continue
+                    Sign up
                   </Text>
-                </TouchableOpacity>
-              </View>
-
-              <View className='flex gab-3'>
-                <Text
-                  className='mx-auto text-l text-darkest'
-                  style={{ fontFamily: 'outfit-bold' }}
-                >
-                  Already have an account?
-                </Text>
-                <Link
-                  href='/sign-in'
-                  className='mx-auto'
-                >
+                  <Image
+                    source={images.FRGians}
+                    className='w-14 h-14 mt-10 mx-auto'
+                    tintColor='#000000'
+                  />
                   <Text
-                    className='mx-auto text-2xl text-coSecondary'
+                    className='mx-auto text-coTitle'
                     style={{ fontFamily: 'outfit-bold' }}
                   >
-                    Sign in
+                    FRGians
                   </Text>
-                </Link>
+                  <Text
+                    className='mx-auto mt-5 text-xl color-title'
+                    style={{ fontFamily: 'outfit-bold' }}
+                  >
+                    Join our FRG application
+                  </Text>
+                </View>
+
+                <View className='gap-2'>
+                  <TextInput
+                    className='w-full px-4 py-3 rounded-lg bg-secondary color-darkest border border-dataHolder'
+                    style={{ fontFamily: 'outfit-bold' }}
+                    value={firstName}
+                    placeholder='first name'
+                    placeholderTextColor='#1234'
+                    onChangeText={(firstName) => setFirstName(firstName)}
+                    onFocus={() => {
+                      setTimeout(() => {
+                        (scrollViewRef.current as any)?.scrollToPosition(
+                          0,
+                          100,
+                          true
+                        );
+                      }, 300);
+                    }}
+                  />
+                  <TextInput
+                    className='w-full px-4 py-3 rounded-lg bg-secondary color-darkest border border-dataHolder'
+                    style={{ fontFamily: 'outfit-bold' }}
+                    value={lastName}
+                    placeholder='last name'
+                    placeholderTextColor='#1234'
+                    onChangeText={(lastName) => setLastName(lastName)}
+                    onFocus={() => {
+                      setTimeout(() => {
+                        (scrollViewRef.current as any)?.scrollToPosition(
+                          0,
+                          150,
+                          true
+                        );
+                      }, 300);
+                    }}
+                  />
+                  <TextInput
+                    className='w-full px-4 py-3 rounded-lg bg-secondary color-darkest border border-dataHolder'
+                    style={{ fontFamily: 'outfit-bold' }}
+                    value={username}
+                    placeholder='user name'
+                    placeholderTextColor='#1234'
+                    onChangeText={(username) => setUsername(username)}
+                    onFocus={() => {
+                      setTimeout(() => {
+                        (scrollViewRef.current as any)?.scrollToPosition(
+                          0,
+                          200,
+                          true
+                        );
+                      }, 300);
+                    }}
+                  />
+                  <TextInput
+                    className='w-full px-4 py-3 rounded-lg bg-secondary color-darkest border border-dataHolder'
+                    style={{ fontFamily: 'outfit-bold' }}
+                    autoCapitalize='none'
+                    value={emailAddress}
+                    placeholder='email : name.name@frg-eg.com'
+                    placeholderTextColor='#1234'
+                    onChangeText={(email) => setEmailAddress(email)}
+                    onFocus={() => {
+                      setTimeout(() => {
+                        (scrollViewRef.current as any)?.scrollToPosition(
+                          0,
+                          250,
+                          true
+                        );
+                      }, 300);
+                    }}
+                  />
+                  <TextInput
+                    className='w-full px-4 py-3 rounded-lg bg-secondary color-darkest border border-dataHolder'
+                    style={{ fontFamily: 'outfit-bold' }}
+                    value={password}
+                    placeholder='password'
+                    placeholderTextColor='#1234'
+                    secureTextEntry={true}
+                    onChangeText={(password) => setPassword(password)}
+                    onFocus={() => {
+                      setTimeout(() => {
+                        (scrollViewRef.current as any)?.scrollToPosition(
+                          0,
+                          300,
+                          true
+                        );
+                      }, 300);
+                    }}
+                  />
+                </View>
+
+                <View className='p-7'>
+                  <TouchableOpacity
+                    onPress={onSignUpPress}
+                    className='w-full px-4 py-3 rounded-lg bg-coSecondary'
+                  >
+                    <Text
+                      className='mx-auto text-xl text-darkest'
+                      style={{ fontFamily: 'outfit-bold' }}
+                    >
+                      Continue
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+
+                <View className='flex gab-3'>
+                  <Text
+                    className='mx-auto text-l text-darkest'
+                    style={{ fontFamily: 'outfit-bold' }}
+                  >
+                    Already have an account?
+                  </Text>
+                  <Link
+                    href='/sign-in'
+                    className='mx-auto'
+                  >
+                    <Text
+                      className='mx-auto text-2xl text-coSecondary'
+                      style={{ fontFamily: 'outfit-bold' }}
+                    >
+                      Sign in
+                    </Text>
+                  </Link>
+                </View>
               </View>
-            </View>
+            </KeyboardAwareScrollView>
           </LinearGradient>
         </View>
       </TouchableWithoutFeedback>
