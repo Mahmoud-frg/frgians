@@ -51,7 +51,7 @@ const AnimatedCard = () => {
           className='text-sm color-slate-400 self-center'
           style={{ fontFamily: 'outfit-medium' }}
         >
-          Copyright &copy; 2025 FRG | IT department - App version 1.1
+          Copyright &copy; 2025 FRG | IT department - App version 1.1.1
         </Text>
 
         {/* <View style={[styles.line, styles.topl]} />

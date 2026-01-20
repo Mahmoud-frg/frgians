@@ -59,60 +59,33 @@ const PersonsListByCategory = () => {
 
   // Get section head person of the category
   const getDepartmentHead = async (category: number) => {
-    let headCode: string | null = null;
-
-    switch (category) {
-      case 6:
-      case 8:
-        headCode = '240';
-        break;
-      case 3:
-      case 4:
-      case 10:
-        headCode = '243';
-        break;
-      case 2:
-      case 9:
-      case 11:
-        headCode = '355';
-        break;
-      case 1:
-        headCode = '319';
-        break;
-      case 5:
-        headCode = '272';
-        break;
-      case 7:
-        headCode = '883';
-        break;
-      default:
-        headCode = null;
-    }
-
-    if (headCode) {
+    try {
       setLoading(true);
-      setSectionHead([]); // Clear the previous sectionHead list
+      setSectionHead([]);
 
       const q = query(
         collection(db, 'personsList'),
-        where('code', '==', Number(headCode))
+        where('headOfSections', 'array-contains', category)
       );
 
       const querySnapshot = await getDocs(q);
 
-      // Store the fetched head person in a temporary array
       const fetchedPersons: personsListType[] = [];
 
       querySnapshot.forEach((doc) => {
-        const docdata = doc.data() as personsListType;
-        fetchedPersons.push({ id: doc.id, ...docdata });
+        fetchedPersons.push({
+          id: doc.id,
+          ...(doc.data() as personsListType),
+        });
       });
 
       setSectionHead(fetchedPersons);
-    } else {
+    } catch (error) {
+      console.error('Error fetching department head:', error);
       setSectionHead([]);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   useEffect(() => {
